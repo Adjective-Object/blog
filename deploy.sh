@@ -19,11 +19,13 @@ if [ $? -ne "0" ]; then
 	exit 1
 fi
 
-rsync --remove-source-files _site/* .
+cp -r _site/* .
 if [ $? -ne "0" ]; then
 	echo "error in moving _site contents"
 	exit 1
 fi
+
+rm -r _site/
 
 git add .
 if [ $? -ne "0" ]; then
