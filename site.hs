@@ -20,12 +20,34 @@ main = hakyll $ do
         route   $ setExtension "css"
         compile $ sassCompiler
 
-    match (fromList ["about.md", "contact.md"]) $ do
-        route   $ niceRoute
-        compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
-            >>= relativizeUrls
-            >>= removeIndexHtml
+    match "index.md" $ do
+        route   $ setExtension "html"
+        compile $ do 
+
+            -- load all posts
+            posts <- recentFirst =<< loadAll "posts/*"
+
+            -- default fields passed to the template
+            let recent = take 5 posts
+                indexCtx =
+                    listField "posts" postCtx (return recent) `mappend`
+                    defaultContext
+
+            pandocCompiler
+                >>= applyAsTemplate indexCtx
+                >>= loadAndApplyTemplate "templates/index.html" indexCtx
+                >>= loadAndApplyTemplate "templates/default.html" indexCtx
+                >>= relativizeUrls
+                >>= removeIndexHtml
+
+    match "contact.md" $ do
+        route niceRoute
+        compile $ do 
+            pandocCompiler
+                >>= loadAndApplyTemplate "templates/default.html" defaultContext
+                >>= relativizeUrls
+                >>= removeIndexHtml
+
 
     match "posts/*" $ do
         route $ niceRoute
@@ -34,6 +56,7 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
             >>= removeIndexHtml
+
 
     create ["archive.html"] $ do
         route niceRoute
@@ -50,24 +73,24 @@ main = hakyll $ do
                 >>= relativizeUrls
                 >>= removeIndexHtml
 
-    match "index.html" $ do
-        route $ setExtension "html"
-        compile $ do
-            -- load all posts
-            posts <- recentFirst =<< loadAll "posts/*"
+    --match "index.html" $ do
+    --    route $ setExtension "html"
+    --    compile $ do
+    --        -- load all posts
+    --        posts <- recentFirst =<< loadAll "posts/*"
 
-            -- default fields passed to the template
-            let recent = take 5 posts
-                indexCtx =
-                    listField "posts" postCtx (return recent) `mappend`
-                    defaultContext
+    --        -- default fields passed to the template
+    --        let recent = take 5 posts
+    --            indexCtx =
+    --                listField "posts" postCtx (return recent) `mappend`
+    --                defaultContext
 
-            -- 
-            getResourceBody 
-                >>= applyAsTemplate indexCtx
-                >>= loadAndApplyTemplate "templates/default.html" indexCtx
-                >>= relativizeUrls
-                >>= removeIndexHtml
+    --        -- 
+    --        getResourceBody 
+    --            >>= applyAsTemplate indexCtx
+    --            >>= loadAndApplyTemplate "templates/default.html" indexCtx
+    --            >>= relativizeUrls
+    --            >>= removeIndexHtml
 
     match "templates/*" $ compile templateCompiler
 

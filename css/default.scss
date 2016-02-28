@@ -23,11 +23,16 @@ $header-padding: 24px;
 
 a {
     text-decoration: none;
-    color: $color-bkg;
+    color: darken($color-bkg, 20);
+    transition: color 0.1s;
 }
 
 a:visited {
-    color: lighten($color-bkg, 20)
+    color: darken($color-bkg, 10);
+}
+
+a:hover {
+    color: $color-bkg;
 }
 
 #header, h1, h2, h3, h4, h5, h6 {
@@ -38,6 +43,25 @@ a:visited {
 h1 {
     margin-bottom: 0.2em;
 }
+
+::-webkit-scrollbar              {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.3)
+}
+
+pre::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.3)
+}
+
+::-webkit-scrollbar-track        { /* 3 */ }
+::-webkit-scrollbar-track-piece  { /* 4 */ }
+::-webkit-scrollbar-thumb        { /* 5 */ }
+::-webkit-scrollbar-corner       { /* 6 */ }
+::-webkit-resizer                { /* 7 */ }
+
 
 
 
@@ -51,6 +75,7 @@ h1 {
 
     #content {
         padding-left: $header-width-collapsed + $header-padding * 2 !important;
+        padding-right: 82px !important;
     }
 
     #header {
@@ -76,10 +101,10 @@ h1 {
                 transform       0.3s;
         }
 
-        @for $n from 2 through 5 {
+        @for $n from 2 through 6{
             $start: 0.10s;
             $step:  0.04s;
-            nav a:nth-child(#{$n}) {
+            nav a:nth-of-type(#{$n}) {
                 transition-delay: 
                     $start + 
                     ($n - 2) * $step;
@@ -97,7 +122,7 @@ h1 {
         box-shadow: 0px 3px 5px #888888;
 
         max-width: $header-width;
-        max-height: 200px;
+        max-height: 250px;
 
     }
 
@@ -170,10 +195,10 @@ h1 {
     content: "\F054";
     font-size: 0.6em;
     position: absolute;
-    top: 0.5em;
+    top: 0.65em;
     left:-1em;
     opacity: 0;
-    transform: translate(1em);
+    transform: translate(0.5em);
     transition: transform       0.3s, 
                 opacity         0.3s;
 }
@@ -189,6 +214,8 @@ h1 {
 // GENERIC
 
 #content {
+    font-family: work-sans;
+
     padding: $page-padding;
     max-width: $page-max-width;
     margin-left: auto;
@@ -237,15 +264,25 @@ h1 {
 
     p, ul, ol, {
         margin-bottom: 1em;
-        font-size: 17px;
+        font-size: 14px;
     }
     p {
-        text-indent: 1.5em;
+        text-indent: 1em;
+    }
+
+    pre {
+        background-color: #222222;
+        color: #FFEEEE;
+        padding: 1em;
+        margin-bottom: 14px;
     }
 
 
     li {
         list-style-type: none;
+        display: block;
+        position: relative;
+        padding-left: 2em;
     }
 
     li:before {
@@ -253,13 +290,58 @@ h1 {
         content: "\F054";
         font-size: 0.8em;
         margin-left: 1em;
+        position: absolute;
+        left:0;
+        top:0.25em;
+        right:0;
+        width: 2em;
+    }
+
+    pre {
+        overflow-x: auto;
+    }
+
+    a {
+        position: relative;
+        width: auto;
+    }
+
+    a:before {
+        content: "";
+        display:block;
+        position: absolute;
+        width:100%;
+        height: 1px;
+        left:0;
+        bottom: 0;
+        background-color: $color-bkg;
+
+        transition: opacity         0.3s, 
+                    transform       0.3s;
+
+        transform: scale(0.8,1);
+        opacity: 0;
+    }
+
+    a:hover:before {
+        transition: opacity 0.3s, transform 0.3s;
+
+        transform: scale(1,1);
+        opacity: 1;
+    }
+
+    i.fa {
+        width:14px;
+        position:relative;
+        left:-14px;
     }
 
 }
 
 #content .done-post {
+    margin-top: 2em;
     font-family: work-sans, sans-serif;
-    font-size: 2em;
+    font-size: 1.5em;
 }
 
 

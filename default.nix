@@ -18,6 +18,9 @@ in {
     devEnv = stdenv.mkDerivation {
         name = "hakyll-blog";
         buildInputs = dependencies;
+        shellHook = ''
+          export PATH="$PATH:./node_modules/.bin"
+        '';
     };
 }
 
