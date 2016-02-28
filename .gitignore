@@ -1,0 +1,8 @@
+# ignore build products
+_site
+_cache
+
+site
+*.hi
+*.o
+
