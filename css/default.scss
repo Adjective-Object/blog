@@ -1,0 +1,258 @@
+// RESET
+
+* {
+    box-sizing: border-box;
+    margin:0;
+    padding: 0;
+}
+
+
+
+// FONTS
+@import '/assets/work-sans/stylesheet.css';
+@import '/assets/font-awesome-4.5.0/css/font-awesome.min.css';
+
+// CONSTANTS
+$header-width: 128px;
+$header-width-collapsed: 64px;
+$header-font: work-sans, sans-serif;
+
+$color-bkg: #D74A6C;
+$light-text: #FFEEEE;
+
+$page-max-width: 780px;
+$page-padding: 42px;
+$header-padding: 24px;
+
+
+// GLOBALS
+
+a {
+    text-decoration: none;
+    color: $color-bkg;
+}
+
+a:visited {
+    color: lighten($color-bkg, 20)
+}
+
+#header, h1, h2, h3, h4, h5, h6 {
+    font-family: $header-font;
+    font-weight: 300;
+}
+
+h1 {
+    margin-bottom: 0.2em;
+}
+
+
+
+
+
+@media (max-width: $page-max-width) {
+    #header-wrap {
+        width: 100%;
+        left: 0
+    }
+
+    body {
+        margin-left: $header-width-collapsed + 16px;
+    }
+
+    #header {
+        top:    -16px;
+        left:   16px;
+
+        overflow: hidden;
+
+        img {
+            height: 42px;
+            width:  42px;
+        }
+
+        transition: 
+            background-color    0.3s,
+            box-shadow          0.3s,
+            max-width           0.2s,
+            max-height          0.2s;
+
+        nav a {
+            transition: 
+                opacity         0.3s, 
+                transform       0.3s;
+        }
+
+        @for $n from 2 through 5 {
+            $start: 0.10s;
+            $step:  0.04s;
+            nav a:nth-child(#{$n}) {
+                transition-delay: 
+                    $start + 
+                    ($n - 2) * $step;
+            }
+        }
+    }
+
+    #header:hover {
+        background-color: $color-bkg;
+    
+        nav a:not(:first-child) {
+            transform: translate(0,0);
+            opacity: 1;
+        }
+        box-shadow: 0px 3px 5px #888888;
+
+        max-width: $header-width;
+        max-height: 300px;
+
+    }
+
+    #header:not(:hover) {
+        max-width: 42px + $header-padding * 2;
+        max-height: 42px + $header-padding * 2;
+
+        nav a:not(:first-child) {
+            transform: translate(-32px);
+            opacity:0;
+        }
+    }
+
+}
+
+@media (min-width: $page-max-width) {
+
+    #header-wrap {
+        width: $page-max-width;
+        left: 50%;
+        margin-left: -$page-max-width / 2;
+    }
+    
+    #content {
+        padding-left: $header-width + $page-padding !important;
+    }
+
+    #header {
+        width: $header-width;
+        background-color: $color-bkg;
+        left: 0;
+    }
+
+    #header img {
+        width: $header-width - $header-padding * 2;
+        height: $header-width - $header-padding * 2;
+    }
+
+}
+
+#header-wrap {
+    position: fixed;
+    top: $page-padding;
+}
+
+#header {
+    transform: translate(0);
+    position:absolute;
+    padding: $header-padding;
+}
+
+#header nav a {
+    display: flex;
+    color: $light-text
+}   
+
+#header nav img {
+    border-radius: 50%;
+    margin-bottom: 1.5em;
+}
+
+#header a {
+    color: inherit;
+}
+
+
+
+
+// GENERIC
+
+#content {
+    padding: $page-padding;
+    max-width: $page-max-width;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+
+// Posts
+
+
+@media (min-width: $page-max-width) {
+    #content .info .date {
+        margin-left:0;
+
+    }
+}
+
+#content .info {
+    flex-flow: row wrap;
+    display: flex;
+    width: 100%;
+
+    margin-bottom: 1em;
+}
+
+#content .info .date, #content .info .post-title {
+    flex-basis: 100%;
+    display: flex;
+}
+
+#content .info .date {
+    display: flex;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+#content .info .author {
+    flex-basis: 100%;
+    float: left;
+}
+
+
+#content {
+
+    p, ul, ol, {
+        margin-bottom: 1em;
+        font-size: 17px;
+    }
+    p {
+        text-indent: 1.5em;
+    }
+
+
+    li {
+        list-style-type: none;
+    }
+
+    li:before {
+        font-family: FontAwesome;
+        content: "\F054";
+        font-size: 0.8em;
+        margin-left: 1em;
+    }
+
+}
+
+#content .done-post {
+    font-family: work-sans, sans-serif;
+    font-size: 2em;
+}
+
+
+
+
+
+
+a.archive-link {
+    float:right;
+}
