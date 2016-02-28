@@ -49,8 +49,8 @@ h1 {
         left: 0
     }
 
-    body {
-        margin-left: $header-width-collapsed + 16px;
+    #content {
+        padding-left: $header-width-collapsed + $header-padding * 2 !important;
     }
 
     #header {
@@ -97,7 +97,7 @@ h1 {
         box-shadow: 0px 3px 5px #888888;
 
         max-width: $header-width;
-        max-height: 300px;
+        max-height: 200px;
 
     }
 
@@ -119,10 +119,11 @@ h1 {
         width: $page-max-width;
         left: 50%;
         margin-left: -$page-max-width / 2;
+        height: 10px;
     }
     
     #content {
-        padding-left: $header-width + $page-padding !important;
+        padding-left: $header-width + 32px !important;
     }
 
     #header {
@@ -144,8 +145,8 @@ h1 {
 }
 
 #header {
-    transform: translate(0);
     position:absolute;
+    transform: translate(0);
     padding: $header-padding;
 }
 
@@ -161,6 +162,25 @@ h1 {
 
 #header a {
     color: inherit;
+    position: relative;
+}
+
+#header a:not(:first-child):before {
+    font-family: FontAwesome;
+    content: "\F054";
+    font-size: 0.6em;
+    position: absolute;
+    top: 0.5em;
+    left:-1em;
+    opacity: 0;
+    transform: translate(1em);
+    transition: transform       0.3s, 
+                opacity         0.3s;
+}
+
+#header a:hover:before {
+    transform: translate(0);
+    opacity: 1;
 }
 
 
