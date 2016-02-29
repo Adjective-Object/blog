@@ -4,10 +4,10 @@ env:
 
 language: haskell
 ghc:
-- "7.10"
+- "7.10.3"
 
 install:
-    - cabal install hakyll
+    - cabal install hakyll-4.7.5.1 hakyll-sass-0.2.0
 
 script: bash ./deploy.sh
 
