@@ -2,16 +2,20 @@ let pkgs = import <nixpkgs> {};
 in with pkgs; let
 
     # build tools
-    prohjectHaskellEnv =
+    projectHaskellEnv =
         haskellPackages.ghcWithPackages 
             (hsPackages: with hsPackages; [
+                # libraries
                 hakyll
                 hakyll-sass
+
+                # cabal
+                cabal-install
             ]);
 
     dependencies = [
         stdenv
-        prohjectHaskellEnv
+        projectHaskellEnv
     ];
 
 in {

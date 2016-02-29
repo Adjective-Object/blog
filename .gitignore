@@ -1,6 +1,7 @@
 # ignore build products
 _site
 _cache
+dist/
 
 site
 *.hi

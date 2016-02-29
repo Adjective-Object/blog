@@ -1,12 +1,6 @@
 #/usr/bin/env bash
 
-make site-static
-if [ $? -ne "0" ]; then
-	echo "error in building site binary"
-	exit 1
-fi
-
-./site-static build
+./dist/site/site build
 if [ $? -ne "0" ]; then
 	echo "error in building site"
 	exit 1
