@@ -1,12 +1,12 @@
 #/usr/bin/env bash
 
-make site
+make site-static
 if [ $? -ne "0" ]; then
 	echo "error in building site binary"
 	exit 1
 fi
 
-./site build
+./site-static build
 if [ $? -ne "0" ]; then
 	echo "error in building site"
 	exit 1
@@ -39,7 +39,7 @@ if [ $? -ne "0" ]; then
 	exit 1
 fi
 
-git commit -am "build at $current_time"
+git commit "https://${GH_TOKEN}@${GH_REF} master:gh-pages" 2>&1 > /dev/null
 if [ $? -ne "0" ]; then
 	echo "error in git commit"
 	exit 1
