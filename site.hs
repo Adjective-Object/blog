@@ -9,9 +9,18 @@ import          System.FilePath.Posix (
                     takeBaseName,takeDirectory,
                     (</>),splitFileName)
 
+import GHC.IO.Encoding
+
 --------------------------------------------------------------------------------
 main :: IO ()
-main = hakyll $ do
+main = do
+    setLocaleEncoding utf8
+    setFileSystemEncoding utf8
+    setForeignEncoding utf8
+
+    hakyll $ do
+    
+
     match "assets/**" $ do
         route   idRoute
         compile copyFileCompiler

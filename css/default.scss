@@ -279,19 +279,22 @@ pre::-webkit-scrollbar-thumb {
 
 
     li {
-        list-style-type: none;
-        display: block;
         position: relative;
-        padding-left: 2em;
+        left: 2em;
     }
 
-    li:before {
+    ul li {
+        list-style-type: none;
+        display: block;
+    }
+
+    ul li:before {
         font-family: FontAwesome;
         content: "\F054";
         font-size: 0.8em;
         margin-left: 1em;
         position: absolute;
-        left:0;
+        left:-2em;
         top:0.25em;
         right:0;
         width: 2em;

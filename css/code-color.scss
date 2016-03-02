@@ -1,0 +1,39 @@
+$background: #222222;
+$color: #D74A6C;
+
+$candy-green:   #1E9B76;
+$candy-green-l: #56BD79;
+$candy-blue:    #58A3C2;
+$candy-yellow:  #FFE11A;
+$candy-orange:  #FDAC43;
+
+pre {
+    background-color: $background;
+    font-family: 'anonymous-pro', monospace;
+    font-size: 12px;
+}
+
+// KeyWordTok
+.sourceCode .kw { color: desaturate(darken($candy-blue,10), 20) }
+// DataTypeTok
+.sourceCode .dt { color: $color; }
+
+// DecValTok (decimal value), BaseNTok, FloatTok
+.sourceCode .dv, .sourceCode .bn, .sourceCode .fl { color: $candy-green; }
+// CharTok
+.sourceCode .ch { color: $candy-green-l}
+// StringTok
+.sourceCode .st { color: $candy-green-l}
+// CommentTok
+.sourceCode .co { color: lighten($background, 30); }
+// OtherTok
+.sourceCode .ot { color: $candy-blue}
+// AlertTok
+.sourceCode .al { color: $candy-orange; font-weight: bold; }
+// FunctionTok
+.sourceCode .fu { color: complement($color); }
+// RegionMarkerTok
+.sourceCode .re { color: complement($color); }
+// ErrorTok
+.sourceCode .er { color: $candy-yellow; font-weight: bold; }
+

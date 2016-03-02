@@ -67,3 +67,4 @@ This has the downside of automatically enabling power management on USB input de
 ~~~ udev
 ACTION=="add", SUBSYSTEM=="input", TEST=="power/control", ATTR{power/control}="on"
 ~~~
+

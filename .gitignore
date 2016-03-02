@@ -7,3 +7,4 @@ site
 *.hi
 *.o
 
+github_token
