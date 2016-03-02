@@ -1,6 +1,5 @@
 let pkgs = import <nixpkgs> {};
 in with pkgs; let
-
     # build tools
     projectHaskellEnv =
         haskellPackages.ghcWithPackages 
@@ -19,9 +18,7 @@ in with pkgs; let
     ];
 
 in stdenv.mkDerivation {
-    devEnv = stdenv.mkDerivation {
-        name = "hakyll-blog";
-        buildInputs = dependencies;
-    };
+    name = "hakyll-blog";
+    buildInputs = dependencies;
 }
 
