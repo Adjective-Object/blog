@@ -1,5 +1,44 @@
 // RESET
 
+@mixin transition($args...) {
+    -webkit-transition: $args;
+            transition: $args;
+}
+
+@mixin transform($args...) {
+    -webkit-transform: translate($args);
+        -ms-transform: translate($args);
+            transform: translate($args);
+}
+
+@mixin display-flexbox() {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+@mixin flex-flow($args...) {
+  -webkit-flex-flow: $args;
+      -ms-flex-flow: $args;
+          flex-flow: $args;
+}
+
+@mixin flex-basis($args...) {
+  -webkit-flex-basis: $args;
+      -ms-flex-preferred-size: $args;
+          flex-basis: $args;
+}
+
+@mixin transition-delay($args...) {
+    -webkit-transition-delay: $args;
+            transition-delay: $args;
+}
+
+
+
+
+
 * {
     box-sizing: border-box;
     margin:0;
@@ -24,7 +63,7 @@ $header-padding: 24px;
 a {
     text-decoration: none;
     color: darken($color-bkg, 20);
-    transition: color 0.1s;
+    @include transition(color 0.1s);
 }
 
 a:visited {
@@ -89,25 +128,27 @@ pre::-webkit-scrollbar-thumb {
             width:  42px;
         }
 
-        transition: 
+        @include transition(
             background-color    0.3s,
             box-shadow          0.3s,
             max-width           0.2s,
-            max-height          0.2s;
+            max-height          0.2s);
 
         nav a {
-            transition: 
+            @include transition(
                 opacity         0.3s, 
-                transform       0.3s;
+        -webkit-transform       0.3s, 
+            -ms-transform       0.3s, 
+                transform       0.3s);
         }
 
         @for $n from 2 through 6{
             $start: 0.10s;
             $step:  0.04s;
             nav a:nth-of-type(#{$n}) {
-                transition-delay: 
+                @include transition-delay( 
                     $start + 
-                    ($n - 2) * $step;
+                    ($n - 2) * $step);
             }
         }
     }
@@ -116,7 +157,7 @@ pre::-webkit-scrollbar-thumb {
         background-color: $color-bkg;
     
         nav a:not(:first-child) {
-            transform: translate(0,0);
+            @include transform(translate(0,0));
             opacity: 1;
         }
         box-shadow: 0px 3px 5px #888888;
@@ -131,7 +172,7 @@ pre::-webkit-scrollbar-thumb {
         max-height: 42px + $header-padding * 2;
 
         nav a:not(:first-child) {
-            transform: translate(-32px);
+            @include transform(translate(-32px));
             opacity:0;
         }
     }
@@ -171,12 +212,12 @@ pre::-webkit-scrollbar-thumb {
 
 #header {
     position:absolute;
-    transform: translate(0);
+    @include transform(translate(0));
     padding: $header-padding;
 }
 
 #header nav a {
-    display: flex;
+    @include display-flexbox();
     color: $light-text
 }   
 
@@ -198,13 +239,16 @@ pre::-webkit-scrollbar-thumb {
     top: 0.65em;
     left:-1em;
     opacity: 0;
-    transform: translate(0.5em);
-    transition: transform       0.3s, 
-                opacity         0.3s;
+    @include transform(translate(0.5em));
+    @include transition( 
+        -webkit-transform       0.3s, 
+            -ms-transform       0.3s, 
+                transform       0.3s,
+                opacity         0.3s);
 }
 
 #header a:hover:before {
-    transform: translate(0);
+    @include transform(translate(0));
     opacity: 1;
 }
 
@@ -236,26 +280,26 @@ pre::-webkit-scrollbar-thumb {
 }
 
 #content .info {
-    flex-flow: row wrap;
-    display: flex;
+    @include flex-flow(row wrap);
+    @include display-flexbox();
     width: 100%;
 
     margin-bottom: 1em;
 }
 
 #content .info .date, #content .info .post-title {
-    flex-basis: 100%;
-    display: flex;
+    @include flex-basis(100%);
+    @include display-flexbox();
 }
 
 #content .info .date {
-    display: flex;
+    @include display-flexbox();
     align-self: flex-end;
     margin-left: auto;
 }
 
 #content .info .author {
-    flex-basis: 100%;
+    @include flex-basis(100%);
     float: left;
 }
 
@@ -319,17 +363,24 @@ pre::-webkit-scrollbar-thumb {
         bottom: 0;
         background-color: $color-bkg;
 
-        transition: opacity         0.3s, 
-                    transform       0.3s;
+        @include transition( 
+                    opacity         0.3s, 
+            -webkit-transform       0.3s, 
+                -ms-transform       0.3s,
+                    transform       0.3s);
 
-        transform: scale(0.8,1);
+        @include transform(scale(0.8,1));
         opacity: 0;
     }
 
     a:hover:before {
-        transition: opacity 0.3s, transform 0.3s;
+        @include transition(
+            opacity         0.3s,
+    -webkit-transform       0.3s, 
+        -ms-transform       0.3s, 
+            transform       0.3s);
 
-        transform: scale(1,1);
+        @include transform(scale(1,1));
         opacity: 1;
     }
 
