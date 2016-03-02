@@ -20,8 +20,8 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Adjective-Object";
     repo = "blog";
-    rev = "82f03fbd301cac06b20fefc700da684b289d8621";
-    sha256 = "19blb75sr70bzb25k10d4fa490rqgbmnk889ga04xgm4csmihx27";
+    rev = "2dcd6f70d2a9184bddf108f9520d480776e17a3c";
+    sha256 = "09lkkwgxx21394pix80cqv8f45kvjswk2qz4w8785cg8bfhlk0pj";
   };
   meta = {
     description = "Adjective-Object's blog site";
