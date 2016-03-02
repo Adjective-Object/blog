@@ -2,10 +2,10 @@
 title: Packaging This Blog with Nix
 ---
 
-
 As a learning experience, I decided I wanted to try to package this blog using 
 nix. It seemed like it should be a simple enough task, and a good way to get 
 started with packaging my personal projects.
+
 
 # Creating a Local Repo
 Most of the packaging guides for nix start with the assumption you intend to 
@@ -16,7 +16,6 @@ I wanted a way to package my code that would:
 2. Keep package files closely tied to the repositories they sit in
 3. Eventually upstream it without changing the package's default.nix file
 4. Be easy to maintain in the future
-
 
 My personal projects are all held in a `Projects` directory with this rough 
 structure:
@@ -31,10 +30,8 @@ structure:
     └── ...
 ~~~
 
-
 Taking advantage of this regular structure, I settled on the following 
 expression
-
 
 ~~~ nix
 # default to a local build
@@ -78,8 +75,8 @@ nix-env -f root.nix -i $project --arg isLocal true
 nix-env -f root.nix -i $project --arg isLocal false
 ~~~
 
-# Packaging the Blog
 
+# Packaging the Blog
 I already had a `shell.nix` file, so I the dependency resolution part of the 
 packaging process was already done for me. Neat!
 
@@ -96,7 +93,7 @@ scripts that manage your language settings for time formats, keyboard layout,
 etc. Some part of the mechanism requires a locale store, which is provided
 as a part of `glibc`.
 
-In order to fix this, we can add a dependency on glibc and point to the 
+To get around this, we can add a dependency on glibc and point to the 
 locale-archive before the site is built.
 
 ~~~ nix
@@ -106,25 +103,61 @@ locale-archive before the site is built.
   '';
 ~~~
 
-
 ## Deploying with Git
+I pulled heavily on [this](https://gist.github.com/domenic/ec8b0fc8ab45f39403dd)
+example for auto-deploying with travis-ci for automatically deploying built
+sites to a gh-pages branch.
+
+~~~ bash
+  mkdir $out
+  mv _site/* $out
+  cd $out
+
+  git init
+  git config user.email "nix-autobuild@huang-hobbs.co"
+  git config user.name "nix-autobuild"
+  git config http.sslVerify false
+  git add * > /dev/null
+  git commit -am "Nix-build at `time`"
+
+  git push --force --quiet \
+    https://${github_token}@${github_remote} master:gh-pages > /dev/null
+~~~
+
+github_remote and github_token are values set in a let binding at the head
+of the page, and is loaded on evaluation from a file `github_secret` in the
+same folder.
 
 
-# Future Work
-## Continuous Integration
+# End Notes
+I'm pretty pleased with the end result, all things considered. Nix is proving
+to be pretty powerful, if a little difficult to pick up.
 
-## Problems With Commit Hashes?
+## Future Work
+- Resolving problems with commit hashes
 
-## 
+    Right now, networked builds are deployed with response to a commit ID and
+    hash on the master branch. This means that in order to update the commit
+    referenced by the networked system, you have to make 2 commits. This could
+    be fixed by storing the package descriptions in a separate repo, but I
+    think this makes it kind of hard to track how to build your projects.
 
-# Thanks
-[`clever`](https://github.com/cleverca22) for helping me struggle with the nix
-language and nixpkgs stdlib
+- Continuous Integration with Hydra
 
-[`pxc`](https://github.com/therealpxc),
-`gchristensen`, and 
-[`Lethalman`](https://github.com/lethalman)
-on the #nixos freenode channel for advice on how to manage a personal repos
+    Currently, builds still have to be triggered manually. It would be nice to
+    use hydra to automatically build and upload the site. However, this brings
+    up the question of how to keep the github token secret again.
+
+## Thanks
+I probably would have given up on this pretty quickly if not for the help of
+the people who hang out in the #nixos freenode irc channel.
+
+ - [`clever`](https://github.com/cleverca22) for helping me struggle with the 
+    nix language and nixpkgs stdlib
+ - [`pxc`](https://github.com/therealpxc),
+    `gchristensen`, and 
+    [`Lethalman`](https://github.com/lethalman)
+    for advice on how to manage a personal package repo
 
 
 

@@ -11,10 +11,12 @@ let buildHaskell = haskellPackages.ghcWithPackages
       ]);
 
     buildLocale = "en_US.UTF-8";
+    github_token = builtins.readFile ./github_token;
+    github_remote = "github.com/Adjective-Object/blog.git";
 
 in stdenv.mkDerivation {
   name = "blog";
-  buildInputs = [ buildHaskell git glibcLocales ];
+  buildInputs = [ buildHaskell git glibcLocales time ];
   src = fetchFromGitHub {
     owner = "Adjective-Object";
     repo = "blog";
@@ -31,6 +33,7 @@ in stdenv.mkDerivation {
   # force UTF8 lang so hakyll won't panic when building
   configurePhase = ''
     export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive
+    export GH_TOKEN=${github_token}
     export LANG=${buildLocale}
   '';
 
@@ -40,7 +43,19 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir $out
     mv _site/* $out
-    ./deploy_from.sh $out
+    cd $out
+
+    git init
+    git config user.email "nix-autobuild@huang-hobbs.co"
+    git config user.name "nix-autobuild"
+    git config http.sslVerify false
+    git add * > /dev/null
+    git commit -am "Nix-build at `date`"
+
+    echo "pushing to github..."
+    git push --force --quiet \
+      https://${github_token}@${github_remote} master:gh-pages > /dev/null
+
   '';
 
 }
