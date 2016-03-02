@@ -30,5 +30,5 @@ while(x=eval(x));
 
 [email]: http://mhaun13@gmail.com
 [github]: https://github.com/Adjective-Object
-[website]: https://www.huang-hobbs.co/
+[website]: http://www.huang-hobbs.co/
 [instagram]: https://www.instagram.com/adjectiveobject/
