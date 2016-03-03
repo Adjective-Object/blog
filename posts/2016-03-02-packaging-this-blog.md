@@ -1,11 +1,14 @@
 ---
 title: Packaging This Blog with Nix
+tags: packaging, nix, nixos
+      example, hakyll
 ---
 
 As a learning experience, I decided I wanted to try to package this blog using 
 nix. It seemed like it should be a simple enough task, and a good way to get 
 started with packaging my personal projects.
 
+<!-- more -->
 
 # Creating a Local Repo
 Most of the packaging guides for nix start with the assumption you intend to 

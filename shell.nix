@@ -7,6 +7,7 @@ in with pkgs; let
                 # libraries
                 hakyll
                 hakyll-sass
+                split
 
                 # cabal
                 cabal-install

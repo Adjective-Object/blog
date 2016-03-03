@@ -4,6 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        $if(meta-keyword-tag)$$meta-keyword-tag$$endif$
+        $if(teaser-description-tag)$$teaser-description-tag$$endif$
+
         <title>Max$if(title)$ - $title$$endif$</title>
         <link rel="stylesheet" type="text/css" href="/css/default.css" />
         <link rel="stylesheet" type="text/css" href="/css/code-color.css" />
@@ -14,6 +18,8 @@
 
     </head>
     <body>
+        $if(teaser)$$teaser$$endif$
+
         <div id="header-wrap">
         <div id="header">
             <nav id="navigation">

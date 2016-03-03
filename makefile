@@ -2,7 +2,7 @@
 all: html
 
 html: site
-	LANG=en_US.UTF-8 ./site rebuild > /dev/null
+	./site rebuild 
 
 watch: site
 	./site watch
