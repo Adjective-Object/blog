@@ -78,11 +78,13 @@ main = do
         route $ (oEmbedRoute "json")
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/oembed.json" postCtx
+            >>= relativizeUrls
 
     match "posts/*" $ version "oembed-xml" $ do 
         route $ (oEmbedRoute "xml")
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/oembed.xml" postCtx
+            >>= relativizeUrls
 
 
     -------------
