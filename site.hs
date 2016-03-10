@@ -38,7 +38,7 @@ main = do
         compile $ do 
 
             -- load all posts
-            posts <- recentFirst =<< loadAll "posts/*"
+            posts <- recentFirst =<< loadAll ("posts/*" .&&. hasNoVersion)
 
             -- default fields passed to the template
             let recent = take 5 posts
@@ -92,7 +92,7 @@ main = do
     create ["archive.html"] $ do
         route niceRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
+            posts <- recentFirst =<< loadAll ("posts/*" .&&. hasNoVersion)
             let informedArchiveCtx = archiveCtx posts
             makeItem ""
                 >>= loadAndApplyTemplate "templates/archive.html" informedArchiveCtx
@@ -135,7 +135,7 @@ teaserCtx =
 oEmbedCtx :: Context String
 oEmbedCtx = field "oembed-url" $ \item -> do
     path <- getResourceFilePath
-    return $ createOEmbedRoute path
+    return $ "/" ++ createOEmbedRoute path
 
 -- construct a meta keyword string based on the tags field of a project 
 metaKeywordContext :: Context String
