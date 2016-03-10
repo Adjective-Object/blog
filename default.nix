@@ -5,10 +5,6 @@ let buildHaskell = haskellPackages.ghcWithPackages
           # libraries
           hakyll
           hakyll-sass
-          hakyll-tags
-
-          # cabal
-          cabal-install
       ]);
 
     buildLocale = "en_US.UTF-8";

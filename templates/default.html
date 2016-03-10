@@ -7,6 +7,15 @@
 
         $if(meta-keyword-tag)$$meta-keyword-tag$$endif$
         $if(teaser-description-tag)$$teaser-description-tag$$endif$
+        
+        $if(oembed-url)$
+        <link rel="alternate" type="application/json+oembed"
+          href="$oembed-url$.json"
+          title="$if(title)$$title$$else$Max's Blog$endif$" />
+        <link rel="alternate" type="application/xml+oembed"
+          href="$oembed-url$.xml"
+          title="$if(title)$$title$$else$Max's Blog$endif$" />
+        $endif$
 
         <title>Max$if(title)$ - $title$$endif$</title>
         <link rel="stylesheet" type="text/css" href="/css/default.css" />
@@ -18,8 +27,6 @@
 
     </head>
     <body>
-        $if(teaser)$$teaser$$endif$
-
         <div id="header-wrap">
         <div id="header">
             <nav id="navigation">

@@ -9,7 +9,7 @@ import          Hakyll
 import          Hakyll.Web.Sass (sassCompiler)
 import          System.FilePath.Posix (
                     takeBaseName,takeDirectory,
-                    (</>),splitFileName)
+                    (</>),(<.>),splitFileName)
 
 import GHC.IO.Encoding
 
@@ -62,16 +62,32 @@ main = do
                 >>= removeIndexHtml
 
 
-    match "posts/*" $
-        let teaserCtx = teaserField "teaser" "content"
-        in do 
-            route $ niceRoute
-            compile $ pandocCompiler
-                >>= loadAndApplyTemplate "templates/post.html"    postCtx
-                >>= loadAndApplyTemplate "templates/default.html" postCtx
-                >>= relativizeUrls
-                >>= removeIndexHtml
-                    
+    --------------------
+    -- POSTS + OEMBED --
+    --------------------
+
+    match "posts/*" $ do 
+        route $ niceRoute
+        compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= relativizeUrls
+            >>= removeIndexHtml
+
+    match "posts/*" $ version "oembed-json" $ do 
+        route $ (oEmbedRoute "json")
+        compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/oembed.json" postCtx
+
+    match "posts/*" $ version "oembed-xml" $ do 
+        route $ (oEmbedRoute "xml")
+        compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/oembed.xml" postCtx
+
+
+    -------------
+    -- ARCHIVE --
+    -------------
 
     create ["archive.html"] $ do
         route niceRoute
@@ -93,6 +109,7 @@ postCtx =
     dateField "date" "%B %e, %Y"    <>
     metaKeywordContext              <>
     defaultContext                  <>
+    oEmbedCtx                       <>
     teaserCtx
 
 archiveCtx :: [Item String] -> Context String
@@ -102,14 +119,24 @@ archiveCtx posts =
     defaultContext
 
 teaserCtx :: Context String
-teaserCtx = field "teaser-description-tag" $ \item -> do
-    rawText <- getResourceBody
-    let text = itemBody rawText
-        teaserIndex = subListIndex "<!-- more -->" text
-        extractText i = take i text
-        wrapTag t = "<meta name=\"Description\" content\"" ++ t ++ "\" />"
-    return $ maybe "" (wrapTag . extractText) teaserIndex
-            
+teaserCtx = 
+    (field "teaser-description" $ \item -> do
+        rawText <- getResourceBody
+        let text = itemBody rawText
+            teaserIndex = subListIndex "<!-- more -->" text
+            extractText i = take i text
+            removeNewlines = filter ((/=) '\n')
+        return $ maybe "" (removeNewlines . extractText) teaserIndex) <>
+    (field "teaser-description-tag" $ \item -> do
+        teaserText <- getMetadataField (itemIdentifier item) "teaser-description"
+        let wrapTag t = "<meta name=\"Description\" content\"" ++ t ++ "\" />"
+        return $ maybe "" wrapTag teaserText)
+
+oEmbedCtx :: Context String
+oEmbedCtx = field "oembed-url" $ \item -> do
+    path <- getResourceFilePath
+    return $ createOEmbedRoute path
+
 -- construct a meta keyword string based on the tags field of a project 
 metaKeywordContext :: Context String
 metaKeywordContext = field "meta-keyword-tag" $ \item -> do 
@@ -139,6 +166,11 @@ niceRoute = customRoute createIndexRoute
             takeDirectory p </> takeBaseName p </> "index.html"
             where p=toFilePath ident
 
+-- routes for generating oEmbed content
+oEmbedRoute :: String -> Routes
+oEmbedRoute extension = customRoute (\ x -> 
+    (createOEmbedRoute . toFilePath) x <.> extension)
+createOEmbedRoute filepath = "oembed" </> filepath
 
 -- replace url of the form foo/bar/index.html by foo/bar
 removeIndexHtml :: Item String -> Compiler (Item String)

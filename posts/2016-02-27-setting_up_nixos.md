@@ -3,9 +3,9 @@ title: Setting up NixOs on the Lenovo Yoga 11s
 date: 2016-02-28
 ---
 
-
 I recently decided to do a fresh Linux install, and after some convincing from a [friend of mine](https://github.com/taktoa) about the benefits of 'functional package management', I settled on NixOs. This is a summary of the hardware-specific issues I encountered.
 
+<!-- more -->
 
 ## Wireless Drivers
 As with any cutting-edge Linux installation, wireless support is nonexistent out of the box. Normally, I would download the appropriate driver package file on a separate machine (i.e. `.deb` / `.rpm`), and install it on the new machine. However, since nixos doesn't have a comparable mobile package format, there's no easy way around this.

@@ -1,0 +1,7 @@
+{
+    "type": "link",
+    "title": "$title$",
+    "author_name": "Adjective-Object",
+    "thumbnail_url": "/assets/profile.jpg",
+    "html": "$if(teaser-description)$$teaser-description$$else$No Description Available$endif$"
+}
