@@ -135,9 +135,17 @@ teaserCtx =
         return $ maybe "" wrapTag teaserText)
 
 oEmbedCtx :: Context String
-oEmbedCtx = field "oembed-url" $ \item -> do
-    path <- getResourceFilePath
-    return $ "/" ++ createOEmbedRoute path
+oEmbedCtx = 
+    (field "oembed-url" $ \item -> do
+        path <- getResourceFilePath
+        return $ "/" ++ createOEmbedRoute path) <>
+    (field "oembed-thumbnail-url" $ \item -> do
+        given_url <- getMetadataField (itemIdentifier item) "thumbnail"
+        my_url <- getRoute (itemIdentifier item)
+        let thumb_url = maybe "/assets/profile.jpg" id given_url
+            my_real_url = maybe "" id my_url
+        return $ (toSiteRoot my_real_url) ++ thumb_url
+    )
 
 -- construct a meta keyword string based on the tags field of a project 
 metaKeywordContext :: Context String

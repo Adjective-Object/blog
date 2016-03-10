@@ -1,7 +1,10 @@
 {
     "type": "link",
     "title": "$title$",
+    "version": "1.0",
     "author_name": "Adjective-Object",
-    "thumbnail_url": "/assets/profile.jpg",
+    "thumbnail_url": "$oembed-thumbnail-url$",
+    "thumbnail_width": "417",
+    "thumbnail_height": "417",
     "html": "$if(teaser-description)$$teaser-description$$else$No Description Available$endif$"
 }

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <oembed>
     <type>link</type>
-    <title>$title$</type>
+    <title>$title$</title>
+    <version>1.0</version>
     <author_name>Adjective-Object</author_name>
-    <thumbnail_url>/assets/profile.jpg</thumbnail_url>
+    <thumbnail_url>$oembed-thumbnail-url$</thumbnail_url>
+    <thumbnail_width>417</thumbnail_width>
+    <thumbnail_height>417</thumbnail_height>
     <html>$if(teaser-description)$$teaser-description$$else$No teaser-description Available$endif$</html>
 </oembed>
 
