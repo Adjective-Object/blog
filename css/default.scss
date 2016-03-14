@@ -344,6 +344,13 @@ pre::-webkit-scrollbar-thumb {
         width: 2em;
     }
 
+    ol li {
+    }
+
+    li > p:first-child {
+        text-indent: 0;
+    }
+
     pre {
         overflow-x: auto;
     }

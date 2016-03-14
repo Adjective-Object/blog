@@ -43,19 +43,23 @@ Overall, it seems like the current state of NixOS on ARM is extremely immature.
 As it turns out, you can install Hydra on top of Debian without much issue,
 so you can take advantage of the mature Debian packaging environment.
 
- 1. Get the RPi foundation's 
+1. Get the RPi foundation's 
     [Minimal Raspberry Pi Image][min-pi-img]
- 2. Install the Nix and Hydra dependencies.
-    
-        sudo apt-get install TODO
-    
- 3. Download the Nix package manager and install it from source.
 
-        git clone  [ TODO WRITE THIS PART ]
+2. Install the Nix and Hydra dependencies.
+
+    ~~~ bash
+    sudo apt-get install TODO
+    ~~~
+3. Download the Nix package manager and install it from source.
+
+    ~~~ bash
+    git clone  [ TODO WRITE THIS PART ]
+    ~~~
 
     This'll take a while. Grab a beer and go watch your stories.
 
- 4. Download and install hydra, following the 
+4. Download and install hydra, following the 
     [guide on the wiki][hydra-install-guide].
 
 
