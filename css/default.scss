@@ -6,9 +6,9 @@
 }
 
 @mixin transform($args...) {
-    -webkit-transform: translate($args);
-        -ms-transform: translate($args);
-            transform: translate($args);
+    -webkit-transform: $args;
+        -ms-transform: $args;
+            transform: $args;
 }
 
 @mixin display-flexbox() {
@@ -381,12 +381,6 @@ pre::-webkit-scrollbar-thumb {
     }
 
     a:hover:before {
-        @include transition(
-            opacity         0.3s,
-    -webkit-transform       0.3s, 
-        -ms-transform       0.3s, 
-            transform       0.3s);
-
         @include transform(scale(1,1));
         opacity: 1;
     }
