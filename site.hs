@@ -38,7 +38,7 @@ main = do
         compile $ do 
 
             -- load all posts
-            posts <- recentFirst =<< loadAll ("posts/*" .&&. hasNoVersion)
+            posts <- recentFirst =<< loadAll ("posts/*.md" .&&. hasNoVersion)
 
             -- default fields passed to the template
             let recent = take 5 posts
@@ -66,7 +66,7 @@ main = do
     -- POSTS + OEMBED --
     --------------------
 
-    match "posts/*" $ do 
+    match "posts/*.md" $ do 
         route $ niceRoute
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
@@ -74,13 +74,13 @@ main = do
             >>= relativizeUrls
             >>= removeIndexHtml
 
-    match "posts/*" $ version "oembed-json" $ do 
+    match "posts/*.md" $ version "oembed-json" $ do 
         route $ (oEmbedRoute "json")
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/oembed.json" postCtx
             >>= relativizeUrls
 
-    match "posts/*" $ version "oembed-xml" $ do 
+    match "posts/*.md" $ version "oembed-xml" $ do 
         route $ (oEmbedRoute "xml")
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/oembed.xml" postCtx

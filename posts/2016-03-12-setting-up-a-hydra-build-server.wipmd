@@ -44,29 +44,27 @@ Overall, it seems like the current state of NixOS on ARM is extremely immature.
 As it turns out, you can install Hydra on top of Debian without much issue,
 so you can take advantage of the mature Debian packaging environment.
 
-1. Get the RPi foundation's 
-    [Minimal Raspberry Pi Image][min-pi-img]
+## Installation 
+This is the part that takes the longest, because you'll be building packages
+from source. After you have the minimal pi image up and running, you can do the 
+[configuration](#configuration) in another terminal buffer.
 
-2. Install the Nix and Hydra dependencies.
+1. Get the RPi foundation's [Minimal Raspberry Pi Image][min-pi-img], and
+    burn it onto your sd card. Be sure to expand the burnt partitions to the
+    size of the drive.
+
+2. Install the Nix and Hydra dependencies, and reboot to start the postgres
+    systemd service.
 
     ~~~ bash
-    ❯ sudo apt-get install TODO
-    ~~~
-3. Download the Nix package manager and install it from source.
-
-    ~~~ bash
-    ❯ git clone  [ TODO WRITE THIS PART ]
+    ❯ sudo apt-get install [ TODO WRITE THIS PART ]
+    ❯ reboot
     ~~~
 
+3. Download the Nix package manager and [install it from source][install-nix].
     This'll take a while. Grab a beer and go watch your stories.
 
-4. Set up the nixbld user and user group
-
-    ~~~ bash
-    ❯ useradd nixbuilder -G nixbld
-    ~~~
-
-5. Download and install hydra from source. Because hydra's `master` branch
+4. Download and install hydra from source. Because hydra's `master` branch
     is sometimes broken, you need to find the most recent passing build
     of hydra on the 
     [nixos hydra build server](http://hydra.nixos.org/jobset/hydra/master)
@@ -93,8 +91,16 @@ so you can take advantage of the mature Debian packaging environment.
     While this is building you can proceed through the rest of the
     configuration steps.
 
-6. Set up postgres to accept hydra, roughly following the 
-    [guide on the wiki][hydra-install-guide].
+## Configuration
+1. Set up the nixbld user and user group
+
+    ~~~ bash
+    ❯ useradd nixbuilder -G nixbld
+    ~~~
+
+
+2. After postgres is installed, tell postgres to accept hydra, roughly 
+    following the [guide on the wiki][hydra-install-guide].
 
     ~~~ bash
     ❯ sudo -u postgres createuser hydra -P
@@ -107,7 +113,7 @@ so you can take advantage of the mature Debian packaging environment.
     ❯ mkdir ~/hydra   
     ~~~
 
-7. Inform hydra of how to find the postgres server
+3. Inform hydra of how to find the postgres server
 
     ~~~ bash
     ❯ echo "export HYDRA_DBI=\"dbu:Pg:dbname=hydra;host=localhost;user=hydra\"" >> ~/.profile
@@ -118,11 +124,12 @@ so you can take advantage of the mature Debian packaging environment.
     uniqueness, since it defaults to this in the most recent postgres
     version available on debian as of the time of writing (9.4)
 
-8. thing
+4. thing
 
 
 
 [min-pi-img]: https://nixos.org/wiki/Installing_Hydra_on_Ubuntu
+[install-nix]: http://nixos.org/nix/manual/#ch-installing-source
 [hydra-install-guide]: https://nixos.org/wiki/Installing_Hydra_on_Ubuntu
 [working-hydra-revis]: https://github.com/NixOS/hydra/commit/993647d1e3b43f1f9b7dc2ebce889b475d156bb9
 

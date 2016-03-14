@@ -2,7 +2,9 @@
 
 Yet another developer blog.
 
-These are some of the problems I run into & their solutions. I'm currently struggling with nixos and related problem domains. Hopefully you'll find these little writeups useful.
+This is mostly a catalog of the issues I run into & their eventual solutions. 
+I'm currently struggling with nixos and related problem domains. Hopefully 
+you'll find these little writeups useful.
 
 [hand spun with love and hakyll][repo-link]
 
