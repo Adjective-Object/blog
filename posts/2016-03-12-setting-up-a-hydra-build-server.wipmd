@@ -82,8 +82,12 @@ from source. After you have the minimal pi image up and running, you can do the
     ❯ git reset --hard FETCH_HEAD
 
     # build it
+    # if you are building a different revision, 
+    # this step will likely be slightly different
+    # for you
     ❯ ./bootstrap
-    ❯ ./configure
+    ❯ LD_FLAGS="-lpthread" ./configure --with-docbook-xsl=\
+        /usr/share/xml/docbook/stylesheet/docbook-xsl
     ❯ make
     ❯ sudo make install
     ~~~
@@ -118,13 +122,28 @@ from source. After you have the minimal pi image up and running, you can do the
     ~~~ bash
     ❯ echo "export HYDRA_DBI=\"dbu:Pg:dbname=hydra;host=localhost;user=hydra\"" >> ~/.profile
     ❯ echo "export HYDRA_DATA=\"$HOME/hydra\"" >> ~/.profile
+    ❯ echo "localhost:*:*:hydra:[hydra_password]" > ~/.pgpass
     ~~~
 
-    Note that we do not need to tell postgres to use md5 hashes to check for
-    uniqueness, since it defaults to this in the most recent postgres
-    version available on debian as of the time of writing (9.4)
+    We must also tell postges to use md5 authentication instead of peer
+    authentication in the file /etc/postgresql/9.4/main/pg_hba.conf
 
-4. thing
+    ~~~
+    # replace this line
+    local all postgres peer
+
+    # with this line, on the line for local connections (not admin)
+    local all postgres md5
+    ~~~
+
+    and reboot
+
+4. Initialize the postgres databse with the hydra postgres file found in the
+    hydra source repository at src/sql/hydra-postgresql.sql
+
+    ~~~ bash
+    cat "src/sql/hydra-postgresql.sql" | psql -U hydra hydra
+    ~~~
 
 
 
