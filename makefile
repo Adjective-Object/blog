@@ -2,6 +2,7 @@
 all: html
 
 html: site
+	ls -l site
 	./site rebuild 
 
 watch: site

@@ -7,4 +7,5 @@ site
 *.hi
 *.o
 
+deploy_runner.sh
 github_token
