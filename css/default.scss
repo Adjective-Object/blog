@@ -211,6 +211,22 @@ pre::-webkit-scrollbar-thumb {
 
 #content {
 
+    hr {
+        display: block;
+        height: 1px !important;
+
+        margin-top: 2em;
+        margin-bottom: 2em;
+
+        margin-left: auto;
+        margin-right: auto;
+
+        width: 50%;
+        min-width: 200px;
+
+        background-color: #222222;
+    }
+
     p, ul, ol, {
         margin-bottom: 1em;
         font-size: 14px;
@@ -230,6 +246,7 @@ pre::-webkit-scrollbar-thumb {
     li {
         position: relative;
         left: 2em;
+        min-height: 1em;
     }
 
     ul li {
