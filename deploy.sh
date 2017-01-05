@@ -12,7 +12,9 @@ git config http.sslVerify false
 git add * > /dev/null
 git commit -am "automatic-build at `date`"
 
-echo "pushing to github..."
+set -x
+
 git push --force --quiet \
-  ${github_token}@${github_remote} master:gh-pages > /dev/null
+    https://${github_token}:x-oauth-basic@${github_remote} master:gh-pages
+
 
