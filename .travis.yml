@@ -2,6 +2,7 @@ language: nix
 nix: 2.0.4
 before_install: nix-shell --run ./scripts/bump-fixed-build.sh
 deploy:
+  - skip_cleanup: true
   - provider: script
     script: ./scripts/deploy.sh
     on:
