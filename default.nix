@@ -15,7 +15,10 @@ let buildHaskell = haskellPackages.ghcWithPackages
 in stdenv.mkDerivation {
   name = "blog";
   buildInputs = [ buildHaskell git glibcLocales time ];
-  src = builtins.fetchfromGit (self.lib.importJSON "fixed-sversion.json");
+  src = pkgs.fetchFromGitHub (
+    builtins.fromJSON (
+      builtins.readFile ./fixed-version.json
+    ));
   meta = {
     description = "Adjective-Object's blog site";
   };
