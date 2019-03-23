@@ -1,9 +1,7 @@
 language: nix
 nix: 2.0.4
-script: '''
-  ./scripts/bump-fixed-build.sh
+script: ./scripts/bump-fixed-build.sh
   nix-build
-'''
 deploy:
   - provider: script
     script: ./scripts/deploy.sh
