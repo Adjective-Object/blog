@@ -27,7 +27,7 @@ I've already been journalling in Notion about personal work & little tech projec
 
 
 
-I'm planning on setting up a cron + CI to sync my posts to the world at large soon
+I'm planning on setting up a cron + CI soon to sync my posts to the world without having to spin up a dev environment.
 
 
 
