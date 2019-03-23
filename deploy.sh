@@ -7,12 +7,13 @@ BUILD_DIR=$(nix-build)
 cd `mktemp -d`
 cp -r "$BUILD_DIR" ./deploy
 cd deploy
+chmod +w .
 
+pwd
 ls -la
 
 GIT="git -c user.email=\"nix-autobuild@huang-hobbs.co\" \
-    -c user.name=\"nix-autobuild\" \
-    "
+    -c user.name=\"nix-autobuild\" "
 
 $GIT init
 $GIT add *
