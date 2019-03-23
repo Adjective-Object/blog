@@ -1,23 +1,21 @@
 #!/usr/bin/env bash
 
-set -x
+set -ex
 
 BUILD_DIR=$(nix-build)
 
+cd `mktemp -d`
 cp -r "$BUILD_DIR" ./deploy
 cd deploy
 
-git init
-git config user.email "nix-autobuild@huang-hobbs.co"
-git config user.name "nix-autobuild"
-git config http.sslVerify false
-git add * > /dev/null
-git commit -am "automatic-build at `date`"
-git remote add 
+GIT="git -c user.email=\"nix-autobuild@huang-hobbs.co\" \
+    -c user.name=\"nix-autobuild\" \
+    "
 
-set +x
-set -e
+$GIT init
+$GIT add *
+$GIT commit -am "automatic-build at `date`"
 
-git push --force --quiet \
+$GIT push --force --quiet \
     https://${GITHUB_TOKEN}:x-oauth-basic@${GITHUB_REMOTE} master:gh-pages
 
