@@ -1,7 +1,6 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts #-}
-import          Data.Monoid (mappend)
 import          Data.List (isInfixOf, intercalate, findIndex)
 import          Data.List.Split (splitWhen)
 import          Data.Char (isSpace)
@@ -14,8 +13,6 @@ import          System.FilePath.Posix (
 import GHC.IO.Encoding
 
 --------------------------------------------------------------------------------
-
-(<>) = mappend
 
 main :: IO ()
 main = do

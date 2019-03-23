@@ -8,7 +8,7 @@ let buildHaskell = haskellPackages.ghcWithPackages
       ]);
 
     buildLocale = "en_US.UTF-8";
-    github_token = builtins.readFile ./github_token;
+    github_token = builtins.getEnv "GITHUB_PUBLISH_TOKEN";
     github_remote = "github.com/Adjective-Object/blog.git";
 
 in stdenv.mkDerivation {

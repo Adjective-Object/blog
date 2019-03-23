@@ -8,9 +8,6 @@ in with pkgs; let
                 hakyll
                 hakyll-sass
                 split
-
-                # cabal
-                cabal-install
             ]);
 
     dependencies = [
