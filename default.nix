@@ -1,5 +1,5 @@
-{ stdenv, pkgs, fetchFromGitHub }:
-with pkgs;
+let pkgs = import <nixpkgs> {};
+in with pkgs;
 let buildHaskell = haskellPackages.ghcWithPackages
       (hsPackages: with hsPackages; [
           # libraries
@@ -40,20 +40,6 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir $out
     mv _site/* $out
-    cd $out
-
-    git init
-    git config user.email "nix-autobuild@huang-hobbs.co"
-    git config user.name "nix-autobuild"
-    git config http.sslVerify false
-    git add * > /dev/null
-    git commit -am "Nix-build at `date`"
-
-    echo "pushing to github..."
-    git push --force --quiet \
-      https://${github_token}@${github_remote} master:gh-pages > /dev/null
-
   '';
-
 }
 

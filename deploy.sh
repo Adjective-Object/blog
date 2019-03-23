@@ -2,8 +2,10 @@
 
 set -e 
 
-make
-cd _site
+BUILD_DIR=$(nix-build)
+
+cp "$BUILD_DIR" ./deploy
+cd deploy
 
 git init
 git config user.email "nix-autobuild@huang-hobbs.co"
@@ -15,6 +17,5 @@ git commit -am "automatic-build at `date`"
 set -x
 
 git push --force --quiet \
-    https://${github_token}:x-oauth-basic@${github_remote} master:gh-pages
-
+    https://${GITHUB_TOKEN}:x-oauth-basic@${GITHUB_REMOTE} master:gh-pages
 
