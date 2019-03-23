@@ -5,4 +5,4 @@ echo $PATH | tr ':' '\n'
 
 set -ex
 
-nix-prefetch-github adjective-object blog > ./fixed-version.json
+nix-prefetch-git https://github.com/Adjective-Object/blog.git > ./fixed-version.json

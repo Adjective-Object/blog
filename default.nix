@@ -12,13 +12,19 @@ let buildHaskell = haskellPackages.ghcWithPackages
     github_token = builtins.getEnv "GITHUB_PUBLISH_TOKEN";
     github_remote = "github.com/Adjective-Object/blog.git";
 
+    version = builtins.fromJSON (
+      builtins.readFile ./fixed-version.json
+    );
+
 in stdenv.mkDerivation {
   name = "blog";
   buildInputs = [ buildHaskell git glibcLocales time ];
-  src = pkgs.fetchFromGitHub (
-    builtins.fromJSON (
-      builtins.readFile ./fixed-version.json
-    ));
+  src = fetchgit {
+    url = version.url;
+    rev = version.rev;
+    sha256 = version.sha256;
+  };
+    
   meta = {
     description = "Adjective-Object's blog site";
   };
