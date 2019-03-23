@@ -8,6 +8,8 @@ cd `mktemp -d`
 cp -r "$BUILD_DIR" ./deploy
 cd deploy
 
+ls -la
+
 GIT="git -c user.email=\"nix-autobuild@huang-hobbs.co\" \
     -c user.name=\"nix-autobuild\" \
     "
