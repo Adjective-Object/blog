@@ -2,6 +2,6 @@ language: nix
 nix: 2.0.4
 deploy:
   - provider: script
-    script: deploy.sh
+    script: ./deploy.sh
     on:
       branch: master
