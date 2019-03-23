@@ -2,4 +2,4 @@
 
 set -ex
 
-nix-prefetch-github adjective-object blog > fixed-version.json
+nix-prefetch-github adjective-object blog > ./fixed-version.json

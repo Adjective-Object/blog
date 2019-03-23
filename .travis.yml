@@ -1,6 +1,6 @@
 language: nix
 nix: 2.0.4
-script: nix-shell --run ./scripts/bump-fixed-build.sh && nix-build
+before_install: nix-shell '<nixpkgs>' -A nix-prefetch-github --run ./scripts/bump-fixed-build.sh
 deploy:
   - provider: script
     script: ./scripts/deploy.sh
