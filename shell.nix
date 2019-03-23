@@ -13,6 +13,7 @@ in with pkgs; let
     dependencies = [
         stdenv
         projectHaskellEnv
+        nix-prefetch-github
     ];
 
 in stdenv.mkDerivation {

@@ -1,5 +1,6 @@
 let pkgs = import <nixpkgs> {};
 in with pkgs;
+
 let buildHaskell = haskellPackages.ghcWithPackages
       (hsPackages: with hsPackages; [
           # libraries
@@ -14,12 +15,7 @@ let buildHaskell = haskellPackages.ghcWithPackages
 in stdenv.mkDerivation {
   name = "blog";
   buildInputs = [ buildHaskell git glibcLocales time ];
-  src = fetchFromGitHub {
-    owner = "Adjective-Object";
-    repo = "blog";
-    rev = "2dcd6f70d2a9184bddf108f9520d480776e17a3c";
-    sha256 = "09lkkwgxx21394pix80cqv8f45kvjswk2qz4w8785cg8bfhlk0pj";
-  };
+  src = builtins.fetchfromGit (self.lib.importJSON "fixed-sversion.json");
   meta = {
     description = "Adjective-Object's blog site";
   };
