@@ -1,6 +1,7 @@
 {
-  "owner": "adjective-object",
-  "repo": "blog",
-  "rev": "2dcd6f70d2a9184bddf108f9520d480776e17a3c",
-  "sha256": "09lkkwgxx21394pix80cqv8f45kvjswk2qz4w8785cg8bfhlk0pj"
+  "url": "https://github.com/Adjective-Object/blog.git",
+  "rev": "91df02daf9ccc01a582ff9c614612310875f5b08",
+  "date": "2019-03-23T14:11:05-07:00",
+  "sha256": "0qq6sl1m5sdai6nx9cw5zr9xjqbyfmav3xl9lxxmfmvkx3xcsyn4",
+  "fetchSubmodules": false
 }
