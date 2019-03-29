@@ -1,6 +1,6 @@
 ---
 title: 🗒 Check out notion-log-exec
-tags: meta, notion
+tags: notion, meta
 ---
 
 I'm continuing to build out little notion-related tools while automating the publishing of this blog.
@@ -27,5 +27,5 @@ This one is pretty small and self-contained. [notion-log-sync](https://github.co
 
 
 
-I've had a fun time automating the CI/CD process to publish package revisions immediately from github using Travis. Maybe I'll write a follow-up post about that process of automating that deployment process? We'll see.. 😛
+I've had a fun time automating the CI/CD process to publish package revisions immediately from github. Maybe I'll write a follow-up post about automating the deployment process? We'll see.. 😛
 
