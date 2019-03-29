@@ -3,7 +3,7 @@ title: 🗒 Check out notion-log-exec
 tags: meta, notion
 ---
 
-I'm continuing to build out little notion-related tools while automating publishing this blog.
+I'm continuing to build out little notion-related tools while automating the publishing of this blog.
 
 
 
