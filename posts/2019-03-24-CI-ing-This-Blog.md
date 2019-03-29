@@ -1,5 +1,5 @@
 ---
-title: CI-ing This Blog
+title: ⚒ CI-ing This Blog
 tags: notion, meta, haskell, nix
 ---
 
