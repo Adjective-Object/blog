@@ -11,23 +11,23 @@ But lately I've been craving the feeling of doing a thing, putting it out there,
 
 So anyway, check out [oreoreoreo](http://huang-hobbs.co/oreoreoreo/). it's a dumb meme site I made to generate cookies from that one oreo meme
 
-<section class="columnSplit" style="display:flex;">
-<section style="flex: 0.5">
+<section class="columnSplit" style="display:flex;"><section style="flex: 0.5; padding: 0.5em">
 ![](https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F95291386-31b9-4395-bd89-5e0190b4a450%2FUntitled.png)
-</section>
-<section style="flex: 0.5">
-![](https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb3636914-0656-427c-9995-64c0f8d7b367%2FUntitled.png)
-</section>
-</section>
 
-<section class="columnSplit" style="display:flex;">
-<section style="flex: 0.5">
+</section>
+<section style="flex: 0.5; padding: 0.5em">
+![](https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb3636914-0656-427c-9995-64c0f8d7b367%2FUntitled.png)
+
+</section></section>
+
+<section class="columnSplit" style="display:flex;"><section style="flex: 0.5; padding: 0.5em">
 ![](https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F3be7eb0c-4648-4409-89ac-45229b566e27%2FUntitled.png)
+
 </section>
-<section style="flex: 0.5">
+<section style="flex: 0.5; padding: 0.5em">
 ![](https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc06165c5-7030-41eb-bbbf-c7bbc8c9c7e1%2FUntitled.png)
-</section>
-</section>
+
+</section></section>
 
 ## How it Works
 
@@ -35,7 +35,7 @@ oreoreoreo uses an [ohm-js](https://github.com/harc/ohm) grammar to parse the or
 
 The oreoreoreo grammar itself is pretty straightforward
 
-```Plain Text
+```
 CookieGrammar {
     CookieStack = (Cookie | Cream)*
     Cookie = "o" ("r" ~ "e")*
