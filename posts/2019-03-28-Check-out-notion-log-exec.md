@@ -15,7 +15,6 @@ A demo job passing
 <section style="flex: 0.5">
 ![](https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F1c2cf3d0-918f-45bb-8144-9d61ae942182%2Fout-fail.gif)
 A demo job failing. It updates the icon.
-
 </section>
 </section>
 
