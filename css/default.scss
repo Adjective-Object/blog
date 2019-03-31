@@ -230,12 +230,16 @@ pre::-webkit-scrollbar-thumb {
 
   p,
   ul,
-  ol {
+  ol,
+  figcaption {
     margin-bottom: 1em;
     font-size: 14px;
   }
+  figcaption {
+    font-style: italic;
+  }
   p {
-    text-indent: 1em;
+    text-indent: 0.5em;
   }
 
   pre {
