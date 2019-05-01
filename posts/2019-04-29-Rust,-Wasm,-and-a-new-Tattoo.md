@@ -22,7 +22,6 @@ It might look something like one of these:
 
 ---
 
-
 I've been looking for an excuse to use rust for a project for a while now. I've also been thinking I might get a second tattoo soon, so why not tackle both goals at once.
 
 ## Motivation
@@ -45,11 +44,9 @@ The original `dots` was written with simple event handlers and pulled a lot of i
 
 It looked like pretty much every framework out there was pretty early stages and offering slightly different models. the pitch of lightweight "pay for what you use" code that all the wasm-bindgen based frameworks were making.
 
-- I was a little put-off by the bootstrapping code you need to write to load a wasm module and deal with it. 
+- I was a little put-off by the bootstrapping code you need to write to load a wasm module and deal with it.
 
-
-- debugging wasm-pack'd code is needlessly difficult because there are no sourcemaps and panic doesn't preserve error messages
-
+* debugging wasm-pack'd code is needlessly difficult because there are no sourcemaps and panic doesn't preserve error messages
 
 At the end of the day, `virtual_dom_rs` was crashing out during patching under what seemed like they should have been safe circumstances. The internet had nothing to say, and there weren't any relevant open github issues.
 
@@ -61,26 +58,19 @@ I picked `yew` because
 
 - It had minimal up front work.
 
-
-- It had html macro templating that supported dropping in components.
-
+* It had html macro templating that supported dropping in components.
 
 - It came with a prescribed state management, and I was concerned about other things.
-
 
 Yew was comfortable to work with. It got me to a place where I was actually building interactions quickly but I came up against a few unintuitive problems
 
 - callbacks have to be bound inline, and can't be passed in via bound locals — the templating tools look specifically for a lambda in the attribute and the result is parsed into different function calls. `cargo expand` keyed me off on that.
 
-
-- Component names have to be suffixed with `:` when being used in an `html{` macro. 
-
+* Component names have to be suffixed with `:` when being used in an `html{` macro.
 
 - There doesn't seem to be a concept of separate props and state, so each component reading from a larger data model ended up copying its props into the state.
 
-
-- I wasn't able to figure out how to put a ref into a component struct. Because my data model had a lot of shared data, I ended up copying things around a lot at prop barriers.
-
+* I wasn't able to figure out how to put a ref into a component struct. Because my data model had a lot of shared data, I ended up copying things around a lot at prop barriers.
 
 As a new user to rust, debugging macros was a major pain point for me. Entire `html` blocks would light up as erroring whenever there was an error in the macro. I'm assuming the macros don't have access to type information, because there are a lot of awkward workarounds to deal with handling of types compared to JSX.
 
@@ -104,15 +94,13 @@ wasm-opt -Oz \
     ./target/deploy/radial_dots.wasm
 ```
 
-
-
 ![After optimization steps, the non-gzipped wasm is 256k.](https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ffd487727-c48f-484b-9071-5a8a5d448b5d%2FUntitled.png)
 
 The overall size is still an order of magnitude larger than the handwritten js for `dots`. I think the added complexity of having multiple layers of text made a component library a natural thing to structure my work around.
 
 I'm curious what the bundlesize would have come out to had used a different library as a starting point. I think this whole experience has gotten me interested in the prospect of trying out `seed` or `quasar` next, if I can think of something sufficiently small so as to be a good learning project.
 
-## Next Up 
+## Next Up
 
 ### CI/CD
 
@@ -140,6 +128,3 @@ I like a lot of the designs I've been getting out of this thing. I think I might
 !["sugar/oh/honey/honey"](https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F1fbc88d9-e465-4da0-9cd5-7eff2c788cec%2FUntitled.png)
 
 </section></section>
-
-
-
