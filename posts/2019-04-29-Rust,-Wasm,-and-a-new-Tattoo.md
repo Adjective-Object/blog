@@ -129,7 +129,7 @@ Maybe I'll get around to doing that. I've seen `serde` used around a lot so if I
 I like a lot of the designs I've been getting out of this thing. I think I might go for a mixed illustration + graphical approach to this next one. Leave some negative space in the middle and fill it in with some line-work in a different colour.
 
 <section class="columnSplit" style="display:flex;"><section style="flex: 0.33333333333333337; padding: 0.5em">
-!["I/know/enough"\](https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F39e67ca7-9751-4efa-b659-e49855caeac2%2FUntitled.png)
+!["I/know/enough"](https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F39e67ca7-9751-4efa-b659-e49855caeac2%2FUntitled.png)
 
 </section>
 <section style="flex: 0.33333333333333337; padding: 0.5em">
