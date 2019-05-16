@@ -1,6 +1,6 @@
 ---
 title: Rust, Wasm, and a new Tattoo
-tags: rust, personal, toys
+tags: rust, personal, toys, dev
 ---
 
 tl;dr I made [this thing](http://huang-hobbs.co/radial-dots) and I'm going to use it to make myself a new tattoo.

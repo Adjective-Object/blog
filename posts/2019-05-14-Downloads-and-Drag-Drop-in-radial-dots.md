@@ -1,6 +1,6 @@
 ---
 title: Downloads and Drag-Drop in radial-dots
-tags: rust, personal, toys, devlog
+tags: rust, personal, toys, dev
 ---
 
 I recently pushed an update to [radial dots](http://huang-hobbs.co/radial-dots/) that lets you save the document you're editing to an SVG, with the document's state embedded in it. This is similar to the approach I took for [dots](http://huang-hobbs.co/dots/), but took significantly more work to accomplish in the framework.

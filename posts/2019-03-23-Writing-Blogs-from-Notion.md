@@ -1,6 +1,6 @@
 ---
 title: ✍ Writing Blogs from Notion
-tags: notion, meta
+tags: notion, meta, dev
 ---
 
 __tl;dr:__ I wrote this blogpost from notion and published here with [a little tool I wrote](https://github.com/Adjective-Object/notion-md-sync)

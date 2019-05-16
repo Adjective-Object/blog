@@ -1,6 +1,6 @@
 ---
 title: 🗒 Check out notion-log-exec
-tags: notion, meta
+tags: notion, meta, dev
 ---
 
 I'm continuing to build out little notion-related tools while automating the publishing of this blog.

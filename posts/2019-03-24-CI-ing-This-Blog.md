@@ -1,6 +1,6 @@
 ---
 title: ⚒ CI-ing This Blog
-tags: notion, meta, haskell, nix
+tags: notion, meta, haskell, nix, dev
 ---
 
 I spent a good chunk of time this weekend trying to get my blog automatically deploying on github pages via travis.

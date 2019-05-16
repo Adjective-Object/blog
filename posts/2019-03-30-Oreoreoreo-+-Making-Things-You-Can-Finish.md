@@ -1,6 +1,6 @@
 ---
 title: 🍪 Oreoreoreo + Making Things You Can Finish
-tags: javascript
+tags: javascript, toys, dev
 ---
 
 I've been spending the bulk of my dev time since last summer flutter app.
