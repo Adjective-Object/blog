@@ -1,14 +1,18 @@
 <div class="info">
-    <h1 class="post-title">$title$</h1>
-    <h2 class="date">$date$</h2>
-    $if(author)$
-        <h3 class="author">by $author$</h3>
-    $endif$
+  <h1 class="post-title">$title$</h1>
+  <h2 class="date">$date$</h2>
+  $if(author)$
+  <h3 class="author">by $author$</h3>
+  $endif$ $if(tags)$
+  <ul class="header-tags">
+    Tags: $tags$
+  </ul>
+  $endif$
 </div>
 
 $body$
 
 <div class="done-post">
-	<a href = "/">Home</a> ||
-	<a href = "/archive">Archive</a>
+  <a href="/">Home</a> ||
+  <a href="/archive">Archive</a>
 </div>
