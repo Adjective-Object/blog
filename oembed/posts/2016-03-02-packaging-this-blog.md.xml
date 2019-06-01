@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<oembed>
+    <type>link</type>
+    <title>Packaging This Blog with Nix</title>
+    <version>1.0</version>
+    <author_name>Adjective-Object</author_name>
+    <thumbnail_url>../../assets/profile.jpg</thumbnail_url>
+    <thumbnail_width>417</thumbnail_width>
+    <thumbnail_height>417</thumbnail_height>
+    <html>As a learning experience, I decided I wanted to try to package this blog using nix. It seemed like it should be a simple enough task, and a good way to get started with packaging my personal projects.</html>
+</oembed>
+

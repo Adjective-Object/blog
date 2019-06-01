@@ -1,0 +1,10 @@
+{
+    "type": "link",
+    "title": "Packaging This Blog with Nix",
+    "version": "1.0",
+    "author_name": "Adjective-Object",
+    "thumbnail_url": "../../assets/profile.jpg",
+    "thumbnail_width": "417",
+    "thumbnail_height": "417",
+    "html": "As a learning experience, I decided I wanted to try to package this blog using nix. It seemed like it should be a simple enough task, and a good way to get started with packaging my personal projects."
+}

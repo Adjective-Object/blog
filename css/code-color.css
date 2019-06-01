@@ -1,0 +1,39 @@
+pre {
+  background-color: #222222;
+  font-family: 'anonymous-pro', monospace;
+  font-size: 12px; }
+
+.sourceCode .kw {
+  color: #558092; }
+
+.sourceCode .dt {
+  color: #D74A6C; }
+
+.sourceCode .dv, .sourceCode .bn, .sourceCode .fl {
+  color: #1E9B76; }
+
+.sourceCode .ch {
+  color: #56BD79; }
+
+.sourceCode .st {
+  color: #56BD79; }
+
+.sourceCode .co {
+  color: #6f6f6f; }
+
+.sourceCode .ot {
+  color: #58A3C2; }
+
+.sourceCode .al {
+  color: #FDAC43;
+  font-weight: bold; }
+
+.sourceCode .fu {
+  color: #4ad7b5; }
+
+.sourceCode .re {
+  color: #4ad7b5; }
+
+.sourceCode .er {
+  color: #FFE11A;
+  font-weight: bold; }

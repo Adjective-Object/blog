@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" href="../../assets/favicon.png" />
+
+    <meta name="viewport" content="width=480" />
+
+    
+    <meta property="og:title" content="⚒ CI-ing This Blog" />
+     <meta name="keywords" content="notion,meta,haskell,nix,dev">
+
+     
+    <link rel="alternate" type="application/json+oembed" href="../../oembed/./posts/2019-03-24-CI-ing-This-Blog.md.json" title="⚒ CI-ing This Blog" />
+    <link rel="alternate" type="text/xml+oembed" href="../../oembed/./posts/2019-03-24-CI-ing-This-Blog.md.xml" title="⚒ CI-ing This Blog" />
+    
+
+    <title>Max - ⚒ CI-ing This Blog</title>
+    <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/code-color.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/font-awesome-4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/work-sans/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/anonymous-pro/stylesheet.css" />
+  </head>
+  <body>
+    <div id="header-wrap">
+      <div id="header">
+        <nav id="navigation">
+          <a href="../../">
+            <img src="../../assets/profile.jpg" alt="home" />
+          </a>
+          <a href="../../">Home</a>
+          <a href="../../contact">Contact</a>
+          <a href="../../archive">Archive</a>
+          <br />
+          <a href="https://github.com/Adjective-Object">Github</a>
+        </nav>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="info">
+  <h1 class="post-title">⚒ CI-ing This Blog</h1>
+  <h2 class="date">March 24, 2019</h2>
+   
+  <ul class="header-tags">
+    Tags: <a href="../../tags/notion/">notion</a>, <a href="../../tags/meta/">meta</a>, <a href="../../tags/haskell/">haskell</a>, <a href="../../tags/nix/">nix</a>, <a href="../../tags/dev/">dev</a>
+  </ul>
+  
+</div>
+
+<p>I spent a good chunk of time this weekend trying to get my blog automatically deploying on github pages via travis.</p>
+<p>I already had a <a href="http://huang-hobbs.co/blog/posts/2016-03-02-packaging-this-blog/">reproducible nix-based build set up</a> from a few years ago, so I decided to use that as my starting point. It was great because I could drop straight back into my development environment with maybe 5 minutes of work to get back to building the blog.</p>
+<p>The new derivation looks like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode nix"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="bu">let</span> pkgs = import <span class="op">&lt;</span>nixpkgs<span class="op">&gt;</span> {};</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">in</span> <span class="ex">with</span> pkgs<span class="kw">;</span></a>
+<a class="sourceLine" id="cb1-3" title="3"></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="bu">let</span> buildHaskell = haskellPackages.ghcWithPackages</a>
+<a class="sourceLine" id="cb1-5" title="5">      <span class="kw">(</span><span class="ex">hsPackages</span>: with hsPackages<span class="kw">;</span><span class="bu"> [</span></a>
+<a class="sourceLine" id="cb1-6" title="6">          <span class="co"># libraries</span></a>
+<a class="sourceLine" id="cb1-7" title="7">          hakyll</a>
+<a class="sourceLine" id="cb1-8" title="8">          hakyll-sass</a>
+<a class="sourceLine" id="cb1-9" title="9">      ]);</a>
+<a class="sourceLine" id="cb1-10" title="10"></a>
+<a class="sourceLine" id="cb1-11" title="11">    buildLocale <span class="ot">=</span> <span class="st">&quot;en_US.UTF-8&quot;</span>;</a>
+<a class="sourceLine" id="cb1-12" title="12">    github_token <span class="ot">=</span> builtins.getEnv <span class="st">&quot;GITHUB_PUBLISH_TOKEN&quot;</span>;</a>
+<a class="sourceLine" id="cb1-13" title="13">    github_remote <span class="ot">=</span> <span class="st">&quot;github.com/Adjective-Object/blog.git&quot;</span>;</a>
+<a class="sourceLine" id="cb1-14" title="14"></a>
+<a class="sourceLine" id="cb1-15" title="15">    version <span class="ot">=</span> builtins.fromJSON (</a>
+<a class="sourceLine" id="cb1-16" title="16">      builtins.readFile ./fixed-version.json</a>
+<a class="sourceLine" id="cb1-17" title="17">    );</a>
+<a class="sourceLine" id="cb1-18" title="18"></a>
+<a class="sourceLine" id="cb1-19" title="19">in stdenv.mkDerivation {</a>
+<a class="sourceLine" id="cb1-20" title="20">  name <span class="ot">=</span> <span class="st">&quot;blog&quot;</span>;</a>
+<a class="sourceLine" id="cb1-21" title="21">  buildInputs <span class="ot">=</span> [ buildHaskell git glibcLocales time<span class="bu"> ]</span>;</a>
+<a class="sourceLine" id="cb1-22" title="22">  <span class="ex">src</span> = fetchgit {</a>
+<a class="sourceLine" id="cb1-23" title="23">    <span class="ex">url</span> = version.url<span class="kw">;</span></a>
+<a class="sourceLine" id="cb1-24" title="24">    <span class="fu">rev</span> = version.rev<span class="kw">;</span></a>
+<a class="sourceLine" id="cb1-25" title="25">    <span class="ex">sha256</span> = version.sha256<span class="kw">;</span></a>
+<a class="sourceLine" id="cb1-26" title="26">  };</a>
+<a class="sourceLine" id="cb1-27" title="27">    </a>
+<a class="sourceLine" id="cb1-28" title="28">  <span class="ex">meta</span> = {</a>
+<a class="sourceLine" id="cb1-29" title="29">    <span class="ex">description</span> = <span class="st">&quot;Adjective-Object's blog site&quot;</span><span class="kw">;</span></a>
+<a class="sourceLine" id="cb1-30" title="30">  };</a>
+<a class="sourceLine" id="cb1-31" title="31"></a>
+<a class="sourceLine" id="cb1-32" title="32">  <span class="co"># disable other phases (too much stuff)</span></a>
+<a class="sourceLine" id="cb1-33" title="33">  <span class="ex">phases</span> = [ <span class="st">&quot;unpackPhase&quot;</span> <span class="st">&quot;configurePhase&quot;</span> <span class="st">&quot;buildPhase&quot;</span> <span class="st">&quot;installPhase&quot;</span>]<span class="kw">;</span></a>
+<a class="sourceLine" id="cb1-34" title="34"></a>
+<a class="sourceLine" id="cb1-35" title="35">  <span class="co"># force UTF8 lang so hakyll won't panic when building</span></a>
+<a class="sourceLine" id="cb1-36" title="36">  <span class="ex">configurePhase</span> = <span class="st">''</span></a>
+<a class="sourceLine" id="cb1-37" title="37">    <span class="bu">export</span> <span class="va">LOCALE_ARCHIVE=${glibcLocales}</span>/lib/locale/locale-archive</a>
+<a class="sourceLine" id="cb1-38" title="38">    <span class="bu">export</span> <span class="va">GH_TOKEN=${github_token}</span></a>
+<a class="sourceLine" id="cb1-39" title="39">    <span class="bu">export</span> <span class="va">LANG=${buildLocale}</span></a>
+<a class="sourceLine" id="cb1-40" title="40">  <span class="st">''</span>;</a>
+<a class="sourceLine" id="cb1-41" title="41"></a>
+<a class="sourceLine" id="cb1-42" title="42">  <span class="ex">buildPhase</span> = <span class="st">&quot;make&quot;</span><span class="kw">;</span></a>
+<a class="sourceLine" id="cb1-43" title="43"></a>
+<a class="sourceLine" id="cb1-44" title="44">  <span class="co"># hacky solution to deploy the result to gh_pages</span></a>
+<a class="sourceLine" id="cb1-45" title="45">  <span class="ex">installPhase</span> = <span class="st">''</span></a>
+<a class="sourceLine" id="cb1-46" title="46">    <span class="fu">mkdir</span> <span class="va">$out</span></a>
+<a class="sourceLine" id="cb1-47" title="47">    <span class="fu">mv</span> _site/* <span class="va">$out</span></a>
+<a class="sourceLine" id="cb1-48" title="48">  <span class="st">''</span>;</a>
+<a class="sourceLine" id="cb1-49" title="49">}</a></code></pre></div>
+<p>The biggest changes were</p>
+<ol type="1">
+<li><p>The fixed version of the build was moved into a separate standalone file, produced by <code>nix-prefetch-git</code></p></li>
+<li><p>The build is no longer effectful! Previously the derivation itself was responsible for publishing the built site to the <code>gh-pages</code> branch of the repo. The responsibility for deploying has been moved into a bash script run by travis.</p></li>
+</ol>
+<p>Overall I’m satisfied with the new design, but as usual, using nix comes with a host of catches you don’t normally bump into in most CI envirnments.</p>
+<ol type="1">
+<li><p>nix &amp; the utilities included by nixpkgs are optimized for declaring derivations separately from source. I’m still actually building the derivation against a tarball fetched from github, it just <em>happens</em> to be in the same directory as the source.</p></li>
+<li><p>Since nix is optimized for 100% reproducible builds, building against the current source tree feels like it’s going against the grain of the package.</p></li>
+</ol>
+<p>In order to hack around it, I’m storing the parameters to fetchFromGithub in a json file that I’m re-generating on every CI build.</p>
+<ol type="1">
+<li>Nix makes everything immutable in store (great), but I lost a good 10 minutes trying to debug why I didn’t have permission to my temp directory when really I forgot to chmod directory I copied out of the store (the <code>nix-build</code> result)</li>
+</ol>
+<p>Something that doesn’t seem to have changed in the past 3 years is that the nix ecosystem isn’t easily googleable, and a lot of the documentation isn’t the best. I’m assuming that</p>
+
+<div class="done-post">
+  <a href="../../">Home</a> ||
+  <a href="../../archive">Archive</a>
+</div>
+
+    </div>
+    <div id="footer"></div>
+  </body>
+</html>

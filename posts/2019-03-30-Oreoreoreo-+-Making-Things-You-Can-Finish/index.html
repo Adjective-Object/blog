@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" href="../../assets/favicon.png" />
+
+    <meta name="viewport" content="width=480" />
+
+    
+    <meta property="og:title" content="🍪 Oreoreoreo + Making Things You Can Finish" />
+     <meta name="keywords" content="javascript,toys,dev">
+
+     
+    <link rel="alternate" type="application/json+oembed" href="../../oembed/./posts/2019-03-30-Oreoreoreo-+-Making-Things-You-Can-Finish.md.json" title="🍪 Oreoreoreo + Making Things You Can Finish" />
+    <link rel="alternate" type="text/xml+oembed" href="../../oembed/./posts/2019-03-30-Oreoreoreo-+-Making-Things-You-Can-Finish.md.xml" title="🍪 Oreoreoreo + Making Things You Can Finish" />
+    
+
+    <title>Max - 🍪 Oreoreoreo + Making Things You Can Finish</title>
+    <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/code-color.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/font-awesome-4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/work-sans/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/anonymous-pro/stylesheet.css" />
+  </head>
+  <body>
+    <div id="header-wrap">
+      <div id="header">
+        <nav id="navigation">
+          <a href="../../">
+            <img src="../../assets/profile.jpg" alt="home" />
+          </a>
+          <a href="../../">Home</a>
+          <a href="../../contact">Contact</a>
+          <a href="../../archive">Archive</a>
+          <br />
+          <a href="https://github.com/Adjective-Object">Github</a>
+        </nav>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="info">
+  <h1 class="post-title">🍪 Oreoreoreo + Making Things You Can Finish</h1>
+  <h2 class="date">March 30, 2019</h2>
+   
+  <ul class="header-tags">
+    Tags: <a href="../../tags/javascript/">javascript</a>, <a href="../../tags/toys/">toys</a>, <a href="../../tags/dev/">dev</a>
+  </ul>
+  
+</div>
+
+<p>I’ve been spending the bulk of my dev time since last summer flutter app.</p>
+<p>I’m the kind of person who ends up building frameworks and tooling for things when they work on a project long enough. I get a perverse satisfaction from ergonomic APIs and developer productivity.</p>
+<p>But lately I’ve been craving the feeling of doing a thing, putting it out there, and being <em>done with it.</em></p>
+<p>So anyway, check out <a href="http://huang-hobbs.co/oreoreoreo/">oreoreoreo</a>. it’s a dumb meme site I made to generate cookies from that one oreo meme</p>
+<section class="columnSplit" style="display:flex;">
+<section style="flex: 0.5; padding: 0.5em">
+<p><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F95291386-31b9-4395-bd89-5e0190b4a450%2FUntitled.png" /></p>
+</section>
+<section style="flex: 0.5; padding: 0.5em">
+<p><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb3636914-0656-427c-9995-64c0f8d7b367%2FUntitled.png" /></p>
+</section>
+</section>
+<section class="columnSplit" style="display:flex;">
+<section style="flex: 0.5; padding: 0.5em">
+<p><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F3be7eb0c-4648-4409-89ac-45229b566e27%2FUntitled.png" /></p>
+</section>
+<section style="flex: 0.5; padding: 0.5em">
+<p><img src="https://www.notion.so/signed/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fc06165c5-7030-41eb-bbbf-c7bbc8c9c7e1%2FUntitled.png" /></p>
+</section>
+</section>
+<h2 id="how-it-works">How it Works</h2>
+<p>oreoreoreo uses an <a href="https://github.com/harc/ohm">ohm-js</a> grammar to parse the oreo tokens from an input string. Their <a href="https://ohmlang.github.io/editor/">interactive editor</a> is great and you should give it a try.</p>
+<p>The oreoreoreo grammar itself is pretty straightforward</p>
+<pre><code>CookieGrammar {
+    CookieStack = (Cookie | Cream)*
+    Cookie = &quot;o&quot; (&quot;r&quot; ~ &quot;e&quot;)*
+    Cream = &quot;r&quot; &quot;e&quot;+
+}</code></pre>
+<p>Two notable expansions on the template “oreo meme” grammar were</p>
+<ul>
+<li><p>Thicker cream can be made by an <code>r</code> followed by repeating <code>e</code>s</p></li>
+<li><p>Thicker cookies can be made with an <code>o</code> followed by repeated <code>r</code>s.</p>
+<ul>
+<li>This means that the meaning of the <code>r</code> will change from “part of a cookie” to “part of cream” based on if it is followed by an <code>e</code> or not.</li>
+</ul></li>
+</ul>
+<p>That gets translated into a a whole lot of DOM elements</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">&lt;section</span><span class="ot"> class=</span><span class="st">&quot;oreoreo-display&quot;</span><span class="ot"> id=</span><span class="st">&quot;oreoreo-host&quot;</span><span class="kw">&gt;</span></a>
+<a class="sourceLine" id="cb2-2" title="2">  <span class="kw">&lt;section</span><span class="ot"> style=</span><span class="st">&quot;z-index: 1000&quot;</span><span class="ot"> class=</span><span class="st">&quot;biscuit cookie&quot;</span><span class="kw">&gt;</span></a>
+<a class="sourceLine" id="cb2-3" title="3">    <span class="kw">&lt;section</span><span class="ot"> class=</span><span class="st">&quot;segment&quot;</span><span class="kw">&gt;&lt;/section&gt;</span></a>
+<a class="sourceLine" id="cb2-4" title="4">    <span class="kw">&lt;section</span><span class="ot"> class=</span><span class="st">&quot;segment&quot;</span><span class="kw">&gt;&lt;/section&gt;</span></a>
+<a class="sourceLine" id="cb2-5" title="5">    <span class="kw">&lt;section</span><span class="ot"> class=</span><span class="st">&quot;segment&quot;</span><span class="kw">&gt;&lt;/section&gt;</span></a>
+<a class="sourceLine" id="cb2-6" title="6">  <span class="kw">&lt;/section&gt;</span></a>
+<a class="sourceLine" id="cb2-7" title="7">  <span class="kw">&lt;section</span><span class="ot"> style=</span><span class="st">&quot;z-index: 999&quot;</span><span class="ot"> class=</span><span class="st">&quot;biscuit filling&quot;</span><span class="kw">&gt;</span></a>
+<a class="sourceLine" id="cb2-8" title="8">    <span class="kw">&lt;section</span><span class="ot"> class=</span><span class="st">&quot;segment&quot;</span><span class="kw">&gt;&lt;/section&gt;</span></a>
+<a class="sourceLine" id="cb2-9" title="9">    <span class="kw">&lt;section</span><span class="ot"> class=</span><span class="st">&quot;segment&quot;</span><span class="kw">&gt;&lt;/section&gt;</span></a>
+<a class="sourceLine" id="cb2-10" title="10">  <span class="kw">&lt;/section&gt;</span></a>
+<a class="sourceLine" id="cb2-11" title="11">  <span class="kw">&lt;section</span><span class="ot"> style=</span><span class="st">&quot;z-index: 998&quot;</span><span class="ot"> class=</span><span class="st">&quot;biscuit cookie&quot;</span><span class="kw">&gt;</span></a>
+<a class="sourceLine" id="cb2-12" title="12">    <span class="kw">&lt;section</span><span class="ot"> class=</span><span class="st">&quot;segment&quot;</span><span class="kw">&gt;&lt;/section&gt;</span></a>
+<a class="sourceLine" id="cb2-13" title="13">    <span class="kw">&lt;section</span><span class="ot"> class=</span><span class="st">&quot;segment&quot;</span><span class="kw">&gt;&lt;/section&gt;</span></a>
+<a class="sourceLine" id="cb2-14" title="14">  <span class="kw">&lt;/section&gt;</span></a>
+<a class="sourceLine" id="cb2-15" title="15"><span class="kw">&lt;/section&gt;</span></a></code></pre></div>
+<p>And then styled and spaced relative to one another appropriately with CSS adjacency selectors.</p>
+<p>All that just to generate some dumb meme images.</p>
+<p>I hope you enjoy it!</p>
+
+<div class="done-post">
+  <a href="../../">Home</a> ||
+  <a href="../../archive">Archive</a>
+</div>
+
+    </div>
+    <div id="footer"></div>
+  </body>
+</html>

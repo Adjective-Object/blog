@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" href="../../assets/favicon.png" />
+
+    <meta name="viewport" content="width=480" />
+
+    
+    <meta property="og:title" content="Goodbye, Nixos" />
+     <meta name="keywords" content="nix,nixos">
+
+     
+    <link rel="alternate" type="application/json+oembed" href="../../oembed/./posts/2016-04-13-goodbye-nixos.md.json" title="Goodbye, Nixos" />
+    <link rel="alternate" type="text/xml+oembed" href="../../oembed/./posts/2016-04-13-goodbye-nixos.md.xml" title="Goodbye, Nixos" />
+    
+
+    <title>Max - Goodbye, Nixos</title>
+    <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/code-color.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/font-awesome-4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/work-sans/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/anonymous-pro/stylesheet.css" />
+  </head>
+  <body>
+    <div id="header-wrap">
+      <div id="header">
+        <nav id="navigation">
+          <a href="../../">
+            <img src="../../assets/profile.jpg" alt="home" />
+          </a>
+          <a href="../../">Home</a>
+          <a href="../../contact">Contact</a>
+          <a href="../../archive">Archive</a>
+          <br />
+          <a href="https://github.com/Adjective-Object">Github</a>
+        </nav>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="info">
+  <h1 class="post-title">Goodbye, Nixos</h1>
+  <h2 class="date">April 13, 2016</h2>
+   
+  <ul class="header-tags">
+    Tags: <a href="../../tags/nix/">nix</a>, <a href="../../tags/nixos/">nixos</a>
+  </ul>
+  
+</div>
+
+<p>NixOs is a great idea, but after 2 and a half months of using it as my primary OS, I’ve decided to give up on it for the time being. This is a rough summary of my reasons:</p>
+<h2 id="nix-is-immature-slow-and-unusable">Nix is Immature, Slow, and Unusable</h2>
+<p>I think this is one of the biggest problems with nixos. There seem to be some <em>questionable</em> design decisions made in the core of the nix package manager, mostly stemming from the principled ‘stateless / functional’ approach nix wants to take.</p>
+<p>The biggest issue I have is that nix performs no caching of the derivations of a repository.This, coupled with the way most users want to query packages (by name, not by attribute path) means that <em>every package</em> has to be re-evaluated on every package install.</p>
+<p>The community approach to this problem is to use <a href="https://github.com/madjar/nox"><code>nox</code></a>, a wrapper around nix that caches the derivation made by fully evaluating a nix channel. However, this cache only lasts an hour, and has no relationship with the nix channel it’s derived from.</p>
+<h3 id="tldr">tldr</h3>
+<ul>
+<li>there is no good caching implementation</li>
+<li>packages are hard to find</li>
+<li>the command line interface is bad</li>
+</ul>
+<h2 id="all-software-is-broken-mostly-in-the-build-process">All Software is Broken, Mostly in the Build Process</h2>
+<p>Because most distributions of Linux make similar decisions wrt where to put packages &amp; where to put include files, a lot of software can get away with being silently broken, and still build without issue on these distributions.</p>
+<p>For example, the build proces of the <code>godot</code> engine completely ignores the pkg-config path in the environment, yet still uses pkg-config internally. On most systems, this is fine, since the default pkg config path will contain all the right header &amp; library directories. However, because nixos puts everything in the nix store, this can never work on nixos.</p>
+<p>Another example is in the outputs of <code>mesa-gdm</code>. It’s pkg-config files don’t actually provide the path to it’s header directories. Once more this path would normally be provided by the default pkg-config path on another distribution (i.e. <code>/usr/include/..</code> ), but could never work on nixos without the pkg-config files being fixed</p>
+<h3 id="tldr-1">tldr</h3>
+<ul>
+<li>NixOS is a special snowflake that depends on contracts that most software accidentally breaks.</li>
+</ul>
+<h2 id="non-free-software">Non-Free Software</h2>
+<p>Most professionally developed applications treat Linux as a second or third-class operating system. As annoying as this is, it’s hard to fault most companies for doing this – There simply isn’t enough adoption to make prioritizing :inux support worthwhile. Most of the time, we only get support for the latest release of Ubuntu or Fedora. Moreover, most builds will be provided as binaries only, as the projects are for-profit and closed source.</p>
+<p>While a binary distribution isn’t that much of an issue thanks to <code>patchelf</code>, Software distributed like this comes with a host of other issues, like hard-coded paths specific to ubuntu / fedora.</p>
+<p>Once more, it’s not as if the fixes for this are computationally expensive, they just have not been implemented yet in most cases. Moreover, it’s hard to implement these fixes on the binary distributions.</p>
+<h3 id="tldr-2">tldr</h3>
+<ul>
+<li>Try running non-free software on nix, I dare you.</li>
+</ul>
+<h2 id="advantages-of-nix">Advantages of Nix</h2>
+<p>I will say that the nix-shell mechanism has provided one of the nicest development environment experience I’ve had. However you can get that installed on top of a well-supported operating system.</p>
+<h2 id="conclusions">Conclusions</h2>
+<p>NixOS is too beautiful for this ugly world. I’m switching to xubuntu + nix.</p>
+<p>（ つ Д ｀）.</p>
+
+<div class="done-post">
+  <a href="../../">Home</a> ||
+  <a href="../../archive">Archive</a>
+</div>
+
+    </div>
+    <div id="footer"></div>
+  </body>
+</html>

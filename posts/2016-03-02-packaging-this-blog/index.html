@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" href="../../assets/favicon.png" />
+
+    <meta name="viewport" content="width=480" />
+
+    
+    <meta property="og:title" content="Packaging This Blog with Nix" />
+     <meta name="keywords" content="packaging,nix,nixos,example,hakyll">
+
+     
+    <link rel="alternate" type="application/json+oembed" href="../../oembed/./posts/2016-03-02-packaging-this-blog.md.json" title="Packaging This Blog with Nix" />
+    <link rel="alternate" type="text/xml+oembed" href="../../oembed/./posts/2016-03-02-packaging-this-blog.md.xml" title="Packaging This Blog with Nix" />
+    
+
+    <title>Max - Packaging This Blog with Nix</title>
+    <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/code-color.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/font-awesome-4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/work-sans/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/anonymous-pro/stylesheet.css" />
+  </head>
+  <body>
+    <div id="header-wrap">
+      <div id="header">
+        <nav id="navigation">
+          <a href="../../">
+            <img src="../../assets/profile.jpg" alt="home" />
+          </a>
+          <a href="../../">Home</a>
+          <a href="../../contact">Contact</a>
+          <a href="../../archive">Archive</a>
+          <br />
+          <a href="https://github.com/Adjective-Object">Github</a>
+        </nav>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="info">
+  <h1 class="post-title">Packaging This Blog with Nix</h1>
+  <h2 class="date">March  2, 2016</h2>
+   
+  <ul class="header-tags">
+    Tags: <a href="../../tags/packaging/">packaging</a>, <a href="../../tags/nix/">nix</a>, <a href="../../tags/nixos%20example/">nixos example</a>, <a href="../../tags/hakyll/">hakyll</a>
+  </ul>
+  
+</div>
+
+<p>As a learning experience, I decided I wanted to try to package this blog using nix. It seemed like it should be a simple enough task, and a good way to get started with packaging my personal projects.</p>
+<!-- more -->
+<h1 id="creating-a-local-repo">Creating a Local Repo</h1>
+<p>Most of the packaging guides for nix start with the assumption you intend to upstream your work to nixpkgs ASAP by working in a fork of the nixpkgs repo. I wanted a way to package my code that would:</p>
+<ol type="1">
+<li>Allow me to reliably rebuild it without network access (beyond the initial fetch)</li>
+<li>Keep package files closely tied to the repositories they sit in</li>
+<li>Eventually upstream it without changing the package’s default.nix file</li>
+<li>Be easy to maintain in the future</li>
+</ol>
+<p>My personal projects are all held in a <code>Projects</code> directory with this rough structure:</p>
+<pre><code>~/Projects
+├── blog
+│   ├── default.nix
+│   └── ...
+└── other-project
+    ├── default.nix
+    └── ...</code></pre>
+<p>Taking advantage of this regular structure, I settled on the following expression</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode nix"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># default to a local build</span></a>
+<a class="sourceLine" id="cb2-2" title="2">{<span class="ex">isLocal</span> ? true}:</a>
+<a class="sourceLine" id="cb2-3" title="3"></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="bu">let</span> pkgs = import <span class="op">&lt;</span>nixpkgs<span class="op">&gt;</span> {};</a>
+<a class="sourceLine" id="cb2-5" title="5">    <span class="ex">overrideDerivation</span> = pkgs.stdenv.lib.overrideDerivation<span class="kw">;</span></a>
+<a class="sourceLine" id="cb2-6" title="6">    <span class="ex">localSourceRoot</span> = /home/adjective/Projects<span class="kw">;</span></a>
+<a class="sourceLine" id="cb2-7" title="7"></a>
+<a class="sourceLine" id="cb2-8" title="8">    <span class="co"># if we are building from local source (development)</span></a>
+<a class="sourceLine" id="cb2-9" title="9">    <span class="co"># override the src property of the derivation</span></a>
+<a class="sourceLine" id="cb2-10" title="10">    <span class="co"># otherwise, leave it untouched</span></a>
+<a class="sourceLine" id="cb2-11" title="11">    <span class="ex">overrideIfLocal</span> = (localPath: old:</a>
+<a class="sourceLine" id="cb2-12" title="12">      <span class="bu">let</span> srcModification = (_ :if isLocal </a>
+<a class="sourceLine" id="cb2-13" title="13">          <span class="kw">then</span> <span class="kw">{</span> <span class="ex">src</span> = localPath<span class="kw">;</span> <span class="kw">}</span></a>
+<a class="sourceLine" id="cb2-14" title="14">          <span class="kw">else</span> {}</a>
+<a class="sourceLine" id="cb2-15" title="15">      );</a>
+<a class="sourceLine" id="cb2-16" title="16">      <span class="kw">in</span> <span class="ex">overrideDerivation</span> old srcModification </a>
+<a class="sourceLine" id="cb2-17" title="17">    );</a>
+<a class="sourceLine" id="cb2-18" title="18"></a>
+<a class="sourceLine" id="cb2-19" title="19">    <span class="co"># load a package and override it if we are</span></a>
+<a class="sourceLine" id="cb2-20" title="20">    <span class="co"># doing a local build</span></a>
+<a class="sourceLine" id="cb2-21" title="21">    <span class="ex">loadPackage</span> = (localPath:</a>
+<a class="sourceLine" id="cb2-22" title="22">      <span class="ex">overrideIfLocal</span> </a>
+<a class="sourceLine" id="cb2-23" title="23">        <span class="ex">localPath</span> </a>
+<a class="sourceLine" id="cb2-24" title="24">        <span class="kw">(</span><span class="ex">pkgs.callPackage</span> (<span class="st">&quot;</span><span class="va">${localPath}</span><span class="st">/default.nix&quot;</span><span class="kw">)</span> {})</a>
+<a class="sourceLine" id="cb2-25" title="25">    );</a>
+<a class="sourceLine" id="cb2-26" title="26"></a>
+<a class="sourceLine" id="cb2-27" title="27"><span class="co"># list of projects that have been packaged so far</span></a>
+<a class="sourceLine" id="cb2-28" title="28"><span class="kw">in</span> <span class="ex">with</span> pkgs<span class="kw">;</span></a>
+<a class="sourceLine" id="cb2-29" title="29"><span class="kw">{</span></a>
+<a class="sourceLine" id="cb2-30" title="30">  <span class="ex">blog</span> = loadPackage ./blog<span class="kw">;</span></a>
+<a class="sourceLine" id="cb2-31" title="31"><span class="kw">}</span></a></code></pre></div>
+<p>this can be used to build any project as either a local or a networked build with the command</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" title="1"><span class="ex">nix-env</span> -f root.nix -i <span class="va">$project</span> --arg isLocal true</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="ex">nix-env</span> -f root.nix -i <span class="va">$project</span> --arg isLocal false</a></code></pre></div>
+<h1 id="packaging-the-blog">Packaging the Blog</h1>
+<p>I already had a <code>shell.nix</code> file, so I the dependency resolution part of the packaging process was already done for me. Neat!</p>
+<p>However, the peculiar way nix builds things to get reproducible outputs introduced some interesting issues.</p>
+<h2 id="hakyll-utf-8-and-locale">Hakyll, UTF-8, and locale</h2>
+<p>In order to handle utf-8 character encodings, hakyll site binaries require the user set a utf-8 compatible locale (e.g. <code>en_US-UTF8</code>.</p>
+<p>I’m unfamiliar with how locale actually works in Linux. Normally I just set it once when I install and forget about it. Apparently there’s a series of Perl scripts that manage your language settings for time formats, keyboard layout, etc. Some part of the mechanism requires a locale store, which is provided as a part of <code>glibc</code>.</p>
+<p>To get around this, we can add a dependency on glibc and point to the locale-archive before the site is built.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode nix"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1">  <span class="ex">configurePhase</span> = <span class="st">''</span></a>
+<a class="sourceLine" id="cb4-2" title="2">    <span class="bu">export</span> <span class="va">LOCALE_ARCHIVE=${glibcLocales}</span>/lib/locale/locale-archive</a>
+<a class="sourceLine" id="cb4-3" title="3">    <span class="bu">export</span> <span class="va">LANG=${buildLocale}</span></a>
+<a class="sourceLine" id="cb4-4" title="4">  <span class="st">''</span>;</a></code></pre></div>
+<h2 id="deploying-with-git">Deploying with Git</h2>
+<p>I pulled heavily on <a href="https://gist.github.com/domenic/ec8b0fc8ab45f39403dd">this</a> example for auto-deploying with travis-ci for automatically deploying built sites to a gh-pages branch.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" title="1">  <span class="fu">mkdir</span> <span class="va">$out</span></a>
+<a class="sourceLine" id="cb5-2" title="2">  <span class="fu">mv</span> _site/* <span class="va">$out</span></a>
+<a class="sourceLine" id="cb5-3" title="3">  <span class="bu">cd</span> <span class="va">$out</span></a>
+<a class="sourceLine" id="cb5-4" title="4"></a>
+<a class="sourceLine" id="cb5-5" title="5">  <span class="fu">git</span> init</a>
+<a class="sourceLine" id="cb5-6" title="6">  <span class="fu">git</span> config user.email <span class="st">&quot;nix-autobuild@huang-hobbs.co&quot;</span></a>
+<a class="sourceLine" id="cb5-7" title="7">  <span class="fu">git</span> config user.name <span class="st">&quot;nix-autobuild&quot;</span></a>
+<a class="sourceLine" id="cb5-8" title="8">  <span class="fu">git</span> config http.sslVerify false</a>
+<a class="sourceLine" id="cb5-9" title="9">  <span class="fu">git</span> add * <span class="op">&gt;</span> /dev/null</a>
+<a class="sourceLine" id="cb5-10" title="10">  <span class="fu">git</span> commit -am <span class="st">&quot;Nix-build at </span><span class="kw">`</span><span class="bu">time</span><span class="kw">`</span><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb5-11" title="11"></a>
+<a class="sourceLine" id="cb5-12" title="12">  <span class="fu">git</span> push --force --quiet \</a>
+<a class="sourceLine" id="cb5-13" title="13">    https://<span class="va">${github_token}</span>@<span class="va">${github_remote}</span> master:gh-pages <span class="op">&gt;</span> /dev/null</a></code></pre></div>
+<p>github_remote and github_token are values set in a let binding at the head of the page, and is loaded on evaluation from a file <code>github_secret</code> in the same folder.</p>
+<h1 id="end-notes">End Notes</h1>
+<p>I’m pretty pleased with the end result, all things considered. Nix is proving to be pretty powerful, if a little difficult to pick up.</p>
+<h2 id="future-work">Future Work</h2>
+<ul>
+<li><p>Resolving problems with commit hashes</p>
+<p>Right now, networked builds are deployed with response to a commit ID and hash on the master branch. This means that in order to update the commit referenced by the networked system, you have to make 2 commits. This could be fixed by storing the package descriptions in a separate repo, but I think this makes it kind of hard to track how to build your projects.</p></li>
+<li><p>Continuous Integration with Hydra</p>
+<p>Currently, builds still have to be triggered manually. It would be nice to use hydra to automatically build and upload the site. However, this brings up the question of how to keep the github token secret again.</p></li>
+</ul>
+<h2 id="thanks">Thanks</h2>
+<p>I probably would have given up on this pretty quickly if not for the help of the people who hang out in the #nixos freenode irc channel.</p>
+<ul>
+<li><a href="https://github.com/cleverca22"><code>clever</code></a> for helping me struggle with the nix language and nixpkgs stdlib</li>
+<li><a href="https://github.com/therealpxc"><code>pxc</code></a>, <code>gchristensen</code>, and <a href="https://github.com/lethalman"><code>Lethalman</code></a> for advice on how to manage a personal package repo</li>
+</ul>
+
+<div class="done-post">
+  <a href="../../">Home</a> ||
+  <a href="../../archive">Archive</a>
+</div>
+
+    </div>
+    <div id="footer"></div>
+  </body>
+</html>

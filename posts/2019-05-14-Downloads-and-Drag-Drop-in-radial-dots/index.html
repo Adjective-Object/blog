@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" href="../../assets/favicon.png" />
+
+    <meta name="viewport" content="width=480" />
+
+    
+    <meta property="og:title" content="Downloads and Drag-Drop in radial-dots" />
+     <meta name="keywords" content="rust,personal,toys,dev">
+
+     
+    <link rel="alternate" type="application/json+oembed" href="../../oembed/./posts/2019-05-14-Downloads-and-Drag-Drop-in-radial-dots.md.json" title="Downloads and Drag-Drop in radial-dots" />
+    <link rel="alternate" type="text/xml+oembed" href="../../oembed/./posts/2019-05-14-Downloads-and-Drag-Drop-in-radial-dots.md.xml" title="Downloads and Drag-Drop in radial-dots" />
+    
+
+    <title>Max - Downloads and Drag-Drop in radial-dots</title>
+    <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/code-color.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/font-awesome-4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/work-sans/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/anonymous-pro/stylesheet.css" />
+  </head>
+  <body>
+    <div id="header-wrap">
+      <div id="header">
+        <nav id="navigation">
+          <a href="../../">
+            <img src="../../assets/profile.jpg" alt="home" />
+          </a>
+          <a href="../../">Home</a>
+          <a href="../../contact">Contact</a>
+          <a href="../../archive">Archive</a>
+          <br />
+          <a href="https://github.com/Adjective-Object">Github</a>
+        </nav>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="info">
+  <h1 class="post-title">Downloads and Drag-Drop in radial-dots</h1>
+  <h2 class="date">May 14, 2019</h2>
+   
+  <ul class="header-tags">
+    Tags: <a href="../../tags/rust/">rust</a>, <a href="../../tags/personal/">personal</a>, <a href="../../tags/toys/">toys</a>, <a href="../../tags/dev/">dev</a>
+  </ul>
+  
+</div>
+
+<p>I recently pushed an update to <a href="http://huang-hobbs.co/radial-dots/">radial dots</a> that lets you save the document you’re editing to an SVG, with the document’s state embedded in it. This is similar to the approach I took for <a href="http://huang-hobbs.co/dots/">dots</a>, but took significantly more work to accomplish in the framework.</p>
+<h2 id="downloading-a-difference-in-approach">Downloading : A Difference in Approach</h2>
+<p>Yew is built around message passing — state manipulation code lives in a separate worker than the event handlers. Access to the state is encouraged only inside the <code>update</code> method of a component.</p>
+<p>This makes the <a href="https://github.com/Adjective-Object/dots/blob/1.0/FormDrawing.js#L53-L72">original approach</a> of interrupting the mouse click event and serializing the link target feel out of place in yew.</p>
+<p>Instead, <code>dots</code> takes the approach of <a href="https://github.com/Adjective-Object/radial-dots/blob/1.0/src/components/app.rs#L399-L405">rendering the document to a link href</a> whenever the model is updated.</p>
+<p>This simpler and fits with yew’s model a little better, but it’s less efficient at runtime since we are now performing more DOM updates than we would otherwise need to.</p>
+<h2 id="drag-and-drop-async-hell">Drag and Drop : <code>async</code> Hell</h2>
+<p>The biggest issue I ran into while trying to implement this was the problem of callbacks in <code>stdweb</code>.</p>
+<p>Any callback in stdweb must have a static lifetime. Conceptually that makes sense — the browser makes no guarantees as to when a callback is invoked, so there’s no reason to expect that the data you’re pulling on isn’t already cleaned up then.</p>
+<p>This was specifically a problem for me because of FileReader, since the filereader api uses an event-based API.</p>
+<ol type="1">
+<li><p>The consumer registers a callback for the ‘loadend’ event</p></li>
+<li><p>The consumer reads the contents of a file</p></li>
+<li><p>an event is emitted on the FileReader and consumed by a callback handler.</p></li>
+</ol>
+<p>Since the callback needs to read from the FileReader, but the FileReader needs to be moved from the stack into the callback for the callback to be static, this ends up in a bit of a catch-22 situation</p>
+<p>After poking around with a hack involving global refs I <a href="https://github.com/koute/stdweb/issues/338">reached out for some help from the maintainers of stdweb</a>. Objects in stdweb have reference semantics, and are just referencing objects in javascript shim functions. The solution was to <a href="https://github.com/Adjective-Object/radial-dots/blob/1.0/src/components/app.rs#L265-#L295">clone the reader</a> and operate on the clone in the callback.</p>
+<p>As far as I can tell this is the preferred way to access “browser-native” APIs from wasm, as <a href="http://webassemblycode.com/webassembly-cant-access-dom/">wasm doesn’t even have dom access yet</a>… But I don’t know for sure. I still have open questions about how those browser objects end up being memory managed. If there’s one thing this project has revealed to me, it’s that I need to do deeper reading on both rust and the webassembly runtime.</p>
+<h2 id="a-dirty-hack">A Dirty Hack</h2>
+<p>While the problem with FileReader was solved, I still need to emit an event against the <code>App</code> struct in a <code>'static</code> lifetime callback. In the existing code, I accomplish this by taking an unsafe static ref to the app and storing it globally.</p>
+<p>On thinking about this in retrospect, it might be doable by enforcing a ’static lifetime on all apps — I’m not so sure what kind of lifetime requirements yew enforces on the component. Seems like a nice way to clean things up</p>
+<h2 id="wrapping-up">Wrapping up</h2>
+<p>I’m still not 100% happy with my solution, but it works, and it’s done enough that I don’t plan on digging back into it.</p>
+<p>I suppose part of the point of trying new things on small isolated projects is that the mistakes won’t haunt me forever.</p>
+
+<div class="done-post">
+  <a href="../../">Home</a> ||
+  <a href="../../archive">Archive</a>
+</div>
+
+    </div>
+    <div id="footer"></div>
+  </body>
+</html>

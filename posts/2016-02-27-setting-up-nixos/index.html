@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" href="../../assets/favicon.png" />
+
+    <meta name="viewport" content="width=480" />
+
+    
+    <meta property="og:title" content="Setting up NixOs on the Lenovo Yoga 11s" />
+     
+     
+    <link rel="alternate" type="application/json+oembed" href="../../oembed/./posts/2016-02-27-setting-up-nixos.md.json" title="Setting up NixOs on the Lenovo Yoga 11s" />
+    <link rel="alternate" type="text/xml+oembed" href="../../oembed/./posts/2016-02-27-setting-up-nixos.md.xml" title="Setting up NixOs on the Lenovo Yoga 11s" />
+    
+
+    <title>Max - Setting up NixOs on the Lenovo Yoga 11s</title>
+    <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/code-color.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/font-awesome-4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/work-sans/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/anonymous-pro/stylesheet.css" />
+  </head>
+  <body>
+    <div id="header-wrap">
+      <div id="header">
+        <nav id="navigation">
+          <a href="../../">
+            <img src="../../assets/profile.jpg" alt="home" />
+          </a>
+          <a href="../../">Home</a>
+          <a href="../../contact">Contact</a>
+          <a href="../../archive">Archive</a>
+          <br />
+          <a href="https://github.com/Adjective-Object">Github</a>
+        </nav>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="info">
+  <h1 class="post-title">Setting up NixOs on the Lenovo Yoga 11s</h1>
+  <h2 class="date">February 28, 2016</h2>
+   
+  <ul class="header-tags">
+    Tags: 
+  </ul>
+  
+</div>
+
+<p>I recently decided to do a fresh Linux install, and after some convincing from a <a href="https://github.com/taktoa">friend of mine</a> about the benefits of ‘functional package management’, I settled on NixOs. This is a summary of the hardware-specific issues I encountered.</p>
+<!-- more -->
+<h2 id="wireless-drivers">Wireless Drivers</h2>
+<p>As with any cutting-edge Linux installation, wireless support is nonexistent out of the box. Normally, I would download the appropriate driver package file on a separate machine (i.e. <code>.deb</code> / <code>.rpm</code>), and install it on the new machine. However, since nixos doesn’t have a comparable mobile package format, there’s no easy way around this.</p>
+<p>You can, however, <a href="https://nixos.org/wiki/Creating_a_NixOS_live_CD">build a custom live CD from a configuration.nix file.</a> if you already have a working nixos installation. The 11s uses the rtl8192c wireless card from Realtek.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode nix"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="ex">networking.enableRL8192cFirmware</span> = true<span class="kw">;</span></a></code></pre></div>
+<p>In Linux kernel versions after 4.3, generic drivers for Realtek cards were mainlined. I haven’t been able to get them to work though, so I just blacklisted the kernel module.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode nix"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="ex">boot.kernelPackages</span> = pkgs.slinuxPackages_4_4<span class="kw">;</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="ex">boot.blacklistedKernelModules</span> = [ <span class="st">&quot;rtl8xxxu&quot;</span> ]<span class="kw">;</span></a></code></pre></div>
+<h2 id="backlight-timing-issues">Backlight Timing Issues</h2>
+<p>Depending on your kernel version, when you press the hardware backlight buttons the backlight may become unresponsive for the next several seconds. The solution to this is to just upgrade to kernel version 4.4 or greater.</p>
+<p>You will probably run into the wireless driver issue described above when you do this.</p>
+<h2 id="terrible-battery-life">Terrible Battery Life</h2>
+<p>This isn’t a problem specific to the Yoga 11, but the default settings are absolutely terrible wrt. battery life. This nix expression adds a systemd service to run the powertop auto-tune settings on boot.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode nix"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">{</span> <span class="ex">config</span>, pkgs, ... <span class="kw">}</span>:</a>
+<a class="sourceLine" id="cb3-2" title="2"></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw">{</span></a>
+<a class="sourceLine" id="cb3-4" title="4">  <span class="ex">config</span> = {</a>
+<a class="sourceLine" id="cb3-5" title="5">    <span class="ex">systemd.services.powertop</span> = {</a>
+<a class="sourceLine" id="cb3-6" title="6">      <span class="ex">description</span> = <span class="st">''</span></a>
+<a class="sourceLine" id="cb3-7" title="7">        <span class="ex">enables</span> powertop<span class="st">'s reccomended settings on boot</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="st">      '';</span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="st">      wantedBy = [ &quot;multi-user.target&quot; ];</span></a>
+<a class="sourceLine" id="cb3-10" title="10"></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="st">      path = with pkgs; [ powertop ];</span></a>
+<a class="sourceLine" id="cb3-12" title="12"></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="st">      environment = {</span></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="st">        TERM = &quot;dumb&quot;;</span></a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="st">      };</span></a>
+<a class="sourceLine" id="cb3-16" title="16"></a>
+<a class="sourceLine" id="cb3-17" title="17"><span class="st">      serviceConfig = {</span></a>
+<a class="sourceLine" id="cb3-18" title="18"><span class="st">        Type = &quot;idle&quot;;</span></a>
+<a class="sourceLine" id="cb3-19" title="19"><span class="st">        User = &quot;root&quot;;</span></a>
+<a class="sourceLine" id="cb3-20" title="20"><span class="st">        ExecStart = ''</span></a>
+<a class="sourceLine" id="cb3-21" title="21"><span class="st">          ${pkgs.powertop}/bin/powertop --auto-tune</span></a>
+<a class="sourceLine" id="cb3-22" title="22"><span class="st">        '';</span></a>
+<a class="sourceLine" id="cb3-23" title="23"><span class="st">      };</span></a>
+<a class="sourceLine" id="cb3-24" title="24"><span class="st">    };</span></a>
+<a class="sourceLine" id="cb3-25" title="25"><span class="st">  };</span></a>
+<a class="sourceLine" id="cb3-26" title="26"><span class="st">}</span></a></code></pre></div>
+<p>This has the downside of automatically enabling power management on USB input devices. The following udev rule should fix that, but it doesn’t work automatically. It might be better to follow the advice given in <a href="https://bbs.archlinux.org/viewtopic.php?id=201486">this forum post</a>, and add it to the ExecStart of the nix expression.</p>
+<pre class="udev"><code>ACTION==&quot;add&quot;, SUBSYSTEM==&quot;input&quot;, TEST==&quot;power/control&quot;, ATTR{power/control}=&quot;on&quot;</code></pre>
+
+<div class="done-post">
+  <a href="../../">Home</a> ||
+  <a href="../../archive">Archive</a>
+</div>
+
+    </div>
+    <div id="footer"></div>
+  </body>
+</html>

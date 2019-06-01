@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" href="../../assets/favicon.png" />
+
+    <meta name="viewport" content="width=480" />
+
+    
+    <meta property="og:title" content="Coping with Dirty Code" />
+     <meta name="keywords" content="code,quality,culture">
+
+     
+    <link rel="alternate" type="application/json+oembed" href="../../oembed/./posts/2016-05-08-dirty-laundry.md.json" title="Coping with Dirty Code" />
+    <link rel="alternate" type="text/xml+oembed" href="../../oembed/./posts/2016-05-08-dirty-laundry.md.xml" title="Coping with Dirty Code" />
+    
+
+    <title>Max - Coping with Dirty Code</title>
+    <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/code-color.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/font-awesome-4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/work-sans/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" href="../../assets/anonymous-pro/stylesheet.css" />
+  </head>
+  <body>
+    <div id="header-wrap">
+      <div id="header">
+        <nav id="navigation">
+          <a href="../../">
+            <img src="../../assets/profile.jpg" alt="home" />
+          </a>
+          <a href="../../">Home</a>
+          <a href="../../contact">Contact</a>
+          <a href="../../archive">Archive</a>
+          <br />
+          <a href="https://github.com/Adjective-Object">Github</a>
+        </nav>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="info">
+  <h1 class="post-title">Coping with Dirty Code</h1>
+  <h2 class="date">May  8, 2016</h2>
+   
+  <ul class="header-tags">
+    Tags: <a href="../../tags/code%20quality/">code quality</a>, <a href="../../tags/culture/">culture</a>
+  </ul>
+  
+</div>
+
+<p>Code cleanliness is one of those things people like to talk a lot about. Programmers never seem to stop talking about a million different ways to simplify thinking about problems. Whenever I read <a href="https://www.lobste.rs">lobste.rs</a> or <a href="https://news.ycombinator.com">hackernews</a>, it feels like half the posts try to sell me on some new code pattern, and the other half complain about how some other pattern is ‘considered harmful’.</p>
+<p>This weekend I wrote what may be some of the dirtiest, hackiest garbage I have written since high school. I participated in <a href="http://www.tojam.ca/">TOJam 11</a>, and my team made a simple adventure game in C# &amp; XNA — A language I am not familiar with, using a library I was am not familiar with. The end result was a mixed bag of hidden state and half-baked abstractions, including but not limited to:</p>
+<ul>
+<li>A number of singletons that permitted multiple instances</li>
+<li>Arbitrary field visibilities (just put <code>public</code> everywhere!)</li>
+<li>A system for managing game states that was only used once</li>
+<li>Two separate <code>Input</code> singletons</li>
+<li>Constructors taking an enum and crashing on all but one possible enum value.</li>
+<li>A combined entity-subclass &amp; entity-component model</li>
+<li>Objects that were their own factories</li>
+</ul>
+<p>It felt gross.</p>
+<p>It felt really, <em>really</em> gross.</p>
+<p>There were weird bugs that took longer than I would have liked to track down, and most of the time I had to keep large interacting systems in my head to write anything.</p>
+<p>If I’m being honest with myself, most of it was caused by my own half-baked abstractions. I tried to build a nice system underneath the character interactions, but when I ran into a roadblock under time pressure I opted for quick patches instead of the time consuming process of rethinking and restructuring the engine.</p>
+<h2 id="the-other-side-of-the-coin">The Other Side of the Coin</h2>
+<p>I’d like to take a second to talk about my friend Tyler. He’s almost completely self-taught, and uses XNA on a daily basis as an independent game developer. Tyler prefaced working together at TOJam by saying that he didn’t want our code to interface in any way. He ended up writing isolated minigames inside our end project.</p>
+<p>Each minigmame was several thousand lines of if/else statements, and integers used as flags. Lots of duplicated logic and little to no compartmentalization of the parts.</p>
+<p>The thing is, it didn’t matter that it was ‘messy’. It worked just as well as the code anyone else wrote. It was finished in the timespan of the jam, and as far as I can tell, he wrote it without even having to think that hard.</p>
+<p>This approach is so radically foreign to me. The fact that it works at all feels strange.</p>
+<h2 id="takeaway">Takeaway</h2>
+<p>Most of the programmers I know emphasize good design and removing as much replicated behavior as possible from their applications. However, I’m beginning to think that under steep time constraints it might be better to abandon the urge to write pristinely clean systems. Good system design is a thoughtful and time-consuming process, and it’s better to write specialized code than wrangle with a system of poorly generalized logic.</p>
+<p>I guess what I’m trying to say is that sometimes it’s okay to let go of your urge to abstract and just write some shit.</p>
+<h4 id="tldr-good-code-considered-harmful">tl;dr good code considered harmful</h4>
+<p>ps, <a href="https://github.com/Adjective-Object/tojam11/releases/tag/0.1">download our game</a></p>
+
+<div class="done-post">
+  <a href="../../">Home</a> ||
+  <a href="../../archive">Archive</a>
+</div>
+
+    </div>
+    <div id="footer"></div>
+  </body>
+</html>
