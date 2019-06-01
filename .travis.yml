@@ -1,5 +1,7 @@
 language: nix
 nix: 2.0.4
+env:
+  - NIX_PATH="nixpkgs=https://github.com/NixOS/nixpkgs/archive/19.03.tar.gz"
 before_install: nix-shell travis-shell.nix --run ./scripts/bump-fixed-build.sh
 deploy:
   skip_cleanup: true
